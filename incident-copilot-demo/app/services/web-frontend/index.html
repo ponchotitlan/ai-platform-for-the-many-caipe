@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LedgerLite</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b7f5c'/%3E%3Cpath d='M9 22V10h4v8h8v4z' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f3f6fb;--panel:#fff;--ink:#14202e;--muted:#6a7a8c;--line:#e3e9f1;
+  --brand:#1b7f5c;--brand2:#2dd4a3;--navy:#0f2742;
+  --paid:#14804f;--paid-bg:#e0f6ea;--open:#9a6400;--open-bg:#fdf1d6;--over:#b3261e;--over-bg:#fde4e2;
+  --shadow:0 1px 2px rgba(15,39,66,.06),0 8px 24px rgba(15,39,66,.06);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0b1422;--panel:#111e31;--ink:#e8eef6;--muted:#8da0b6;--line:#1f3049;
+  --paid:#5be0a3;--paid-bg:#123a2c;--open:#f2c25b;--open-bg:#3b2f10;--over:#ff8f87;--over-bg:#432020;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+.hero{background:linear-gradient(120deg,#0f2742,#124a52 55%,#1b7f5c);background-size:200% 200%;animation:flow 14s ease infinite;color:#fff;padding:0 24px 90px}
+@keyframes flow{50%{background-position:100% 50%}}
+nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:28px;padding:18px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:-.2px}
+.logo svg{width:30px;height:30px}
+nav a{color:#c8d8e8;text-decoration:none;font-size:14px;padding:6px 2px;border-bottom:2px solid transparent}
+nav a.on,nav a:hover{color:#fff;border-color:var(--brand2)}
+nav .sp{flex:1}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#2dd4a3,#3b82f6);display:grid;place-items:center;font-weight:700;font-size:13px}
+.welcome{max-width:1120px;margin:14px auto 0}
+.welcome h1{margin:0;font-size:28px;letter-spacing:-.5px}
+.welcome p{margin:4px 0 0;color:#b6cadd}
+main{max-width:1120px;margin:-62px auto 40px;padding:0 24px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.kpi{padding:16px 18px;animation:rise .5s both}
+.kpi:nth-child(2){animation-delay:.07s}.kpi:nth-child(3){animation-delay:.14s}.kpi:nth-child(4){animation-delay:.21s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+.kpi .lbl{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.6px}
+.kpi .val{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px}
+.panel{padding:18px 20px}
+.panel h2{margin:0 0 2px;font-size:16px}
+.panel .hint{color:var(--muted);font-size:13px;margin-bottom:12px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:150px}
+.bars div{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(var(--brand2),var(--brand));transform-origin:bottom;animation:grow .7s both;position:relative}
+.bars div:hover{filter:brightness(1.15)}
+.bars div:hover::after{content:attr(data-v);position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:11px;padding:2px 6px;border-radius:5px;white-space:nowrap}
+@keyframes grow{from{transform:scaleY(0)}}
+.days{display:flex;gap:8px;color:var(--muted);font-size:11px;margin-top:6px}.days span{flex:1;text-align:center}
+.status-list{list-style:none;padding:0;margin:8px 0 0}
+.status-list li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.status-list li:first-child{border:0}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--paid)}.dot.t{background:#3b82f6;animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(59,130,246,.18)}}
+.status-list .r{margin-left:auto;color:var(--muted);font-size:12px}
+.table{margin-top:16px;overflow:hidden}
+.thead{display:flex;align-items:center;gap:12px;padding:16px 20px;flex-wrap:wrap}
+.thead h2{margin:0;font-size:16px;flex:1}
+.tabs{display:flex;gap:4px;background:var(--bg);padding:3px;border-radius:10px}
+.tabs button{border:0;background:none;color:var(--muted);padding:6px 12px;border-radius:8px;font:inherit;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-weight:600}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:10px 20px;border-top:1px solid var(--line)}
+td{padding:12px 20px;border-top:1px solid var(--line);font-size:14px;font-variant-numeric:tabular-nums}
+tr.row:hover td{background:rgba(27,127,92,.05)}
+td .cust{display:flex;align-items:center;gap:10px}
+td .ini{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.pill.paid{background:var(--paid-bg);color:var(--paid)}.pill.open{background:var(--open-bg);color:var(--open)}.pill.overdue{background:var(--over-bg);color:var(--over)}
+.btn{border:0;border-radius:9px;padding:7px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;background:var(--brand);color:#fff;transition:transform .1s,filter .15s}
+.btn:hover{filter:brightness(1.1)}.btn:active{transform:scale(.97)}
+.btn.ghost{background:none;color:var(--muted);font-weight:500;cursor:default}
+td.amt,th.amt{text-align:right}
+.overlay{position:fixed;inset:0;background:rgba(7,16,28,.55);backdrop-filter:blur(4px);display:none;place-items:center;padding:16px;z-index:10}
+.overlay.show{display:grid}
+.modal{width:min(420px,100%);padding:24px;animation:pop .25s both;position:relative;overflow:hidden}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(8px)}}
+.modal h3{margin:0 0 4px;font-size:18px}
+.modal .sum{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0;padding:12px 14px;background:var(--bg);border-radius:10px}
+.modal .sum strong{font-size:24px;letter-spacing:-.5px}
+.field{margin:10px 0}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink);font:inherit}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay{width:100%;padding:12px;margin-top:8px;font-size:15px;display:flex;justify-content:center;align-items:center;gap:8px}
+.pay:disabled{filter:grayscale(.4) brightness(.9);cursor:wait}
+.spin{width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:s .8s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.banner{display:none;margin-top:12px;padding:11px 13px;border-radius:9px;font-size:14px}
+.banner.err{display:block;background:var(--over-bg);color:var(--over);animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.done{display:none;text-align:center;padding:16px 0 4px}
+.done svg{width:72px;height:72px}
+.done circle{stroke:var(--brand);stroke-width:3;fill:none;stroke-dasharray:166;stroke-dashoffset:166;animation:draw .6s .1s forwards}
+.done path{stroke:var(--brand);stroke-width:4;fill:none;stroke-linecap:round;stroke-dasharray:48;stroke-dashoffset:48;animation:draw .4s .6s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.confetti i{position:absolute;top:-10px;width:8px;height:14px;border-radius:2px;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(480px) rotate(540deg);opacity:0}}
+.secure{margin-top:12px;text-align:center;font-size:12px;color:var(--muted)}
+footer{max-width:1120px;margin:0 auto 30px;padding:0 24px;color:var(--muted);font-size:12px;text-align:center}
+@media (max-width:860px){.kpis{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}nav a{display:none}th:nth-child(4),td:nth-child(4){display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <nav>
+    <div class="logo">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2dd4a3"/><path d="M9 22V10h4v8h8v4z" fill="#0f2742"/></svg>
+      LedgerLite
+    </div>
+    <a class="on" href="#">Invoices</a><a href="#">Customers</a><a href="#">Payments</a><a href="#">Reports</a>
+    <span class="sp"></span><div class="avatar">AR</div>
+  </nav>
+  <div class="welcome"><h1>Good day, Alex</h1><p>Here is what is happening with your invoices.</p></div>
+</div>
+
+<main>
+  <section class="kpis" id="kpis"></section>
+  <section class="grid">
+    <div class="card panel">
+      <h2>Payments received</h2><div class="hint">Last 14 days, USD</div>
+      <div class="bars" id="bars"></div><div class="days" id="days"></div>
+    </div>
+    <div class="card panel">
+      <h2>Platform</h2><div class="hint">Card payments and payouts</div>
+      <ul class="status-list">
+        <li><span class="dot"></span>Card processing<span class="r">Operational</span></li>
+        <li><span class="dot"></span>Bank payouts<span class="r">Operational</span></li>
+        <li><span class="dot t"></span>Invoice reminders<span class="r">3 queued</span></li>
+      </ul>
+    </div>
+  </section>
+  <section class="card table">
+    <div class="thead"><h2>Invoices</h2>
+      <div class="tabs" id="tabs">
+        <button class="on" data-f="all">All</button><button data-f="open">Open</button><button data-f="overdue">Overdue</button><button data-f="paid">Paid</button>
+      </div>
+    </div>
+    <table><thead><tr><th>Invoice</th><th>Customer</th><th>Status</th><th>Issued</th><th class="amt">Amount</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+  </section>
+</main>
+<footer>LedgerLite · demo environment · all customers and invoices are synthetic</footer>
+
+<div class="overlay" id="ov">
+  <div class="card modal" id="modal">
+    <div class="confetti" id="confetti"></div>
+    <div id="form">
+      <h3 id="m-title">Pay invoice</h3>
+      <div style="color:var(--muted);font-size:14px" id="m-cust"></div>
+      <div class="sum"><span>Amount due</span><strong id="m-amt"></strong></div>
+      <div class="field"><label>Card number</label><input value="4242 4242 4242 4242" inputmode="numeric" autocomplete="off"></div>
+      <div class="two"><div class="field"><label>Expiry</label><input value="12 / 28" autocomplete="off"></div><div class="field"><label>CVC</label><input value="123" autocomplete="off"></div></div>
+      <div class="banner" id="banner" role="alert"></div>
+      <button class="btn pay" id="pay"><span id="pay-t">Pay now</span></button>
+      <button class="btn ghost pay" id="cancel" style="cursor:pointer;margin-top:2px">Cancel</button>
+      <div class="secure">Test card only. No real money moves.</div>
+    </div>
+    <div class="done" id="done">
+      <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="26"/><path d="M16 29l8 8 16-17"/></svg>
+      <h3 style="margin-top:12px">Payment received</h3>
+      <div style="color:var(--muted)" id="d-sub"></div>
+      <button class="btn pay" id="close" style="margin-top:18px">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Synthetic data, same formulas as the Postgres seed (postgres.yaml)
+const customers=['Acme Bakery','Birch Studio','Cobalt Plumbing','Delta Print Shop','Elm Street Florist'];
+const colors=['#e0752d','#7c5cd6','#2b8cc4','#c2410c','#be3a79'];
+const statuses=['paid','open','overdue'];
+const invoices=Array.from({length:20},(_,i)=>{const g=i+1,d=new Date(Date.UTC(2026,7,1+g));
+  return{id:'INV-'+(1000+g),c:g%5,cents:2500+((g*1375)%90000),status:statuses[g%3],date:d}});
+const $=s=>document.querySelector(s), usd=c=>'$'+(c/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+let filter='all', current=null;
+
+function kpis(){
+  const sum=s=>invoices.filter(i=>i.status===s).reduce((a,i)=>a+i.cents,0), n=s=>invoices.filter(i=>i.status===s).length;
+  const items=[['Outstanding',usd(sum('open')+sum('overdue')),n('open')+n('overdue')+' unpaid invoices'],
+    ['Paid',usd(sum('paid')),n('paid')+' invoices'],['Overdue',usd(sum('overdue')),n('overdue')+' need attention'],['Avg. days to pay','6.4','up from 7.1 last month']];
+  $('#kpis').innerHTML=items.map(k=>`<div class="card kpi"><div class="lbl">${k[0]}</div><div class="val">${k[1]}</div><div class="sub">${k[2]}</div></div>`).join('');
+}
+function chart(){
+  const v=[42,58,35,71,64,50,88,76,45,93,67,81,59,102], max=Math.max(...v);
+  $('#bars').innerHTML=v.map((x,i)=>`<div style="height:${x/max*100}%;animation-delay:${i*40}ms" data-v="$${x*37}"></div>`).join('');
+  $('#days').innerHTML=v.map((_,i)=>`<span>${i%2?'':i+13}</span>`).join('');
+}
+function rows(){
+  const list=invoices.filter(i=>filter==='all'||i.status===filter);
+  $('#rows').innerHTML=list.map(i=>`<tr class="row"><td><strong>${i.id}</strong></td>
+    <td><div class="cust"><span class="ini" style="background:${colors[i.c]}">${customers[i.c][0]}</span>${customers[i.c]}</div></td>
+    <td><span class="pill ${i.status}">${i.status[0].toUpperCase()+i.status.slice(1)}</span></td>
+    <td>${i.date.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})}</td>
+    <td class="amt">${usd(i.cents)}</td>
+    <td class="amt">${i.status==='paid'?'':`<button class="btn" data-pay="${i.id}">Pay</button>`}</td></tr>`).join('');
+}
+$('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;filter=b.dataset.f;
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));rows()};
+$('#rows').onclick=e=>{const b=e.target.closest('[data-pay]');if(b)openPay(b.dataset.pay)};
+
+function openPay(id){
+  current=invoices.find(i=>i.id===id);
+  $('#m-title').textContent='Pay '+current.id;$('#m-cust').textContent=customers[current.c];$('#m-amt').textContent=usd(current.cents);
+  $('#banner').className='banner';$('#form').style.display='block';$('#done').style.display='none';$('#confetti').innerHTML='';
+  $('#pay').disabled=false;$('#pay-t').textContent='Pay '+usd(current.cents);$('#ov').classList.add('show');
+}
+function closePay(){$('#ov').classList.remove('show')}
+$('#cancel').onclick=closePay;$('#close').onclick=closePay;
+$('#ov').onclick=e=>{if(e.target.id==='ov'&&!$('#pay').disabled)closePay()};
+
+$('#pay').onclick=async()=>{
+  const btn=$('#pay');btn.disabled=true;$('#pay-t').innerHTML='Processing…';
+  btn.insertAdjacentHTML('afterbegin','<span class="spin" id="sp"></span>');$('#banner').className='banner';
+  try{
+    const r=await fetch('/api/pay',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({invoice_id:current.id,amount_cents:current.cents})});
+    if(!r.ok)throw new Error(r.status);
+    current.status='paid';kpis();rows();
+    $('#d-sub').textContent=usd(current.cents)+' paid for '+current.id;
+    $('#form').style.display='none';$('#done').style.display='block';confetti();
+  }catch(e){
+    const b=$('#banner');b.textContent='Something went wrong. Please try again.';void b.offsetWidth;b.className='banner err';
+    btn.disabled=false;$('#pay-t').textContent='Try again';
+  }
+  const sp=$('#sp');if(sp)sp.remove();
+};
+function confetti(){
+  const c=$('#confetti'),cols=['#2dd4a3','#3b82f6','#f2c25b','#e0752d','#be3a79'];
+  c.innerHTML=Array.from({length:36},()=>`<i style="left:${Math.random()*100}%;background:${cols[Math.random()*5|0]};animation-delay:${Math.random()*.5}s;animation-duration:${1.3+Math.random()}s"></i>`).join('');
+}
+kpis();chart();rows();
+</script>
+</body>
+</html>

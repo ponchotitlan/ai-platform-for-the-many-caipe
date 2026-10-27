@@ -1,0 +1,75 @@
+# Healthy; synthetic invoices only. A red herring for the "database connection" runbooks.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-seed
+  namespace: ledgerlite
+  labels: {app: ledgerlite, tier: data}
+data:
+  seed.sql: |
+    CREATE TABLE customers (id serial PRIMARY KEY, name text NOT NULL, email text NOT NULL);
+    CREATE TABLE invoices (
+      id text PRIMARY KEY,
+      customer_id int REFERENCES customers(id),
+      amount_cents int NOT NULL,
+      currency text NOT NULL DEFAULT 'USD',
+      status text NOT NULL,
+      issued_at date NOT NULL
+    );
+    INSERT INTO customers (name, email) VALUES
+      ('Acme Bakery',       'billing@acme-bakery.example'),
+      ('Birch Studio',      'ap@birch-studio.example'),
+      ('Cobalt Plumbing',   'office@cobalt-plumbing.example'),
+      ('Delta Print Shop',  'accounts@delta-print.example'),
+      ('Elm Street Florist','hello@elm-florist.example');
+    INSERT INTO invoices (id, customer_id, amount_cents, status, issued_at)
+    SELECT 'INV-' || (1000 + g), (g % 5) + 1, 2500 + ((g * 1375) % 90000),
+           (ARRAY['paid','open','overdue'])[(g % 3) + 1], date '2026-08-01' + g
+    FROM generate_series(1, 20) AS g;
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: ledgerlite
+  labels: {app: ledgerlite, tier: data}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: ledgerlite, tier: data}
+  template:
+    metadata:
+      labels: {app: ledgerlite, tier: data}
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          env:
+            - {name: POSTGRES_DB, value: ledgerlite}
+            - {name: POSTGRES_USER, value: ledgerlite}
+            - {name: POSTGRES_PASSWORD, value: demo-only-not-a-secret}
+          ports: [{containerPort: 5432}]
+          readinessProbe:
+            exec: {command: ["pg_isready", "-U", "ledgerlite"]}
+            periodSeconds: 5
+          volumeMounts:
+            - {name: seed, mountPath: /docker-entrypoint-initdb.d}
+            - {name: data, mountPath: /var/lib/postgresql/data}
+          resources:
+            requests: {cpu: 20m, memory: 64Mi}
+            limits: {memory: 256Mi}
+      volumes:
+        - name: seed
+          configMap: {name: postgres-seed}
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: ledgerlite
+  labels: {app: ledgerlite, tier: data}
+spec:
+  selector: {app: ledgerlite, tier: data}
+  ports: [{port: 5432, targetPort: 5432}]

@@ -1,0 +1,10 @@
+# Lets the existing cloudflared tunnel reach the LedgerLite kind node by name
+# (ledgerlite.ponchotitlan.dev -> http://ledgerlite-control-plane:30080).
+# Requires the external "kind" Docker network, which scripts/up.sh creates.
+# Apply: see incident-copilot-demo/scripts/expose.sh. Undo: scripts/unexpose.sh.
+services:
+  cloudflared:
+    networks: [default, kind]
+networks:
+  kind:
+    external: true

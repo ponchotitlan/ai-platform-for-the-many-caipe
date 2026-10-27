@@ -1,0 +1,186 @@
+# Seed config for the incident copilot demo. Copy of CAIPE's config/app-config.yaml
+# (install tag 1.3.0-rc.16) with the models section replaced. Mounted through
+# CAIPE_APP_CONFIG_FILE in the install's .env. See docs/DECISIONS.md D-12.
+# CAIPE UI — application seed configuration (committed example template)
+# ------------------------------------------------------------------------
+# This file is the EXAMPLE/template for app-config. The docker-compose
+# stack mounts the file pointed to by `CAIPE_APP_CONFIG_FILE` (set in .env);
+# by default it falls back to this committed template.
+#
+# For local dev, copy this file to `config/app-config.local.yaml` and
+# uncomment / customize the sections you need:
+#
+#   cp config/app-config.yaml config/app-config.local.yaml
+#   # then in .env:  CAIPE_APP_CONFIG_FILE=./config/app-config.local.yaml
+#
+# `config/*.local.yaml` is gitignored.
+#
+# In Kubernetes deployments, Helm resolves the appConfig.* values block
+# (see applications/caipe/dev/a/values.yaml → appConfig) into the mounted
+# ConfigMap, so this file is NOT used in cluster deployments.
+#
+# Entities defined here are "config-driven": they are upserted into
+# MongoDB on every restart, marked config_driven=true, and cannot be
+# edited/deleted via the UI. Stale entries (removed from this file)
+# are automatically cleaned up.
+#
+# In Docker Compose, ${VAR:-default} syntax is expanded at
+# load time. In Kubernetes, Helm resolves values before creating the
+# ConfigMap, so the mounted YAML contains literal values.
+
+# ── Models ────────────────────────────────────────────────────────
+# At least one model must be present for AI Assist (Skill description /
+# SKILL.md generation, Dynamic Agents builder) to function. The `model_id`
+# value MUST match what the configured provider expects:
+#
+#   aws-bedrock  → raw Bedrock modelId, e.g. "global.anthropic.claude-sonnet-4-6"
+#                  (NO "bedrock/" prefix — the model id is passed straight
+#                  to boto3 and Bedrock will reject a prefixed string).
+#   openai       → OpenAI model name, e.g. "gpt-4o"
+#   azure-openai → Azure deployment name (matches AZURE_OPENAI_DEPLOYMENT)
+#   anthropic-claude → Anthropic model id, e.g. "claude-sonnet-4-5"
+#
+# `provider` must be one of the supported provider bindings.
+models:
+  # Demo: one plain OpenAI model (provider A for the beat 5 swap). Uses OPENAI_API_KEY
+  # and OPENAI_ENDPOINT from the install's .env. Bedrock and Azure entries from the
+  # shipped template were removed because their credentials are not configured here.
+  - model_id: "gpt-4o"
+    name: "GPT-4o (OpenAI)"
+    provider: "openai"
+    description: "Demo default, provider A"
+
+# ── MCP Servers ───────────────────────────────────────────────────
+# Supported transports: "http" (streamable HTTP), "sse", "stdio"
+# In docker-compose dev, set the corresponding env var (e.g.
+# ARGOCD_MCP_URL) if you have those services running locally.
+mcp_servers: []
+  # - id: "github"
+  #   name: "GitHub"
+  #   description: "GitHub repositories and pull requests"
+  #   transport: "http"
+  #   endpoint: "${GITHUB_MCP_URL:-http://localhost:8082}"
+  #   enabled: true
+  # - id: "argocd"
+  #   name: "ArgoCD"
+  #   description: "ArgoCD application and deployment management"
+  #   transport: "http"
+  #   endpoint: "${ARGOCD_MCP_URL:-http://localhost:18002/mcp}"
+  #   enabled: true
+  # - id: "knowledge-base"
+  #   name: "Knowledge Base"
+  #   description: "RAG knowledge base tools"
+  #   transport: "http"
+  #   endpoint: "${RAG_SERVER_MCP_URL:-http://localhost:9446/mcp}"
+  #   enabled: true
+
+# ── Agents ────────────────────────────────────────────────────────
+# Pre-seeded dynamic agents. UI-created agents are stored separately
+# (config_driven=false) and remain editable.
+agents: []
+  # - id: "default-agent"
+  #   name: "Default Agent"
+  #   description: "General-purpose assistant"
+  #   system_prompt: "You are a helpful assistant."
+  #   model_id: "gpt-4o"
+  #   model_provider: "azure-openai"
+  #   visibility: "global"
+  #   allowed_tools: {}
+  #   subagents: []
+  #   enabled: true
+
+# ── Workflow Configs ──────────────────────────────────────────────
+workflow_configs:
+  - id: "wf-movie-guessing"
+    name: "Movie guessing workflow"
+    description: "Guesses a movie based on genre & decade"
+    visibility: "global"
+    steps:
+      - type: step
+        display_text: Ask questions
+        agent_id: dynamic-agent-1774287013861
+        prompt: |-
+          Ask the user following questions:
+          1. Name a decade (e.g. 80s, 90s, 2000s)
+          2. Give them options for genres [Action, Comedy, Sci-Fi, Horror]
+
+          Echo the choices in a file called "choices.txt"
+        on_error: abort
+      - type: step
+        display_text: Name a movie
+        agent_id: dynamic-agent-1773833968652
+        prompt: |-
+          Read choices.txt and tell me a movie title that matches the choices.
+          If you cant think of one, say None exist. Write the movie title in to movie_title.txt
+        on_error: abort
+      - type: step
+        display_text: Send message
+        agent_id: agent-webex-messaging-agent
+        prompt: Read the movie_title.txt, and send me a message
+        on_error: abort
+      - type: step
+        display_text: Evaluate
+        agent_id: security-audit-agent
+        prompt: |-
+          Can you evaluate the workflow and see if all went well? if so just say so
+          and end, if anything seems suspicious, then raise an error using error
+          file instructions
+        on_error: abort
+
+# ── RAG Datasources ──────────────────────────────────────────────
+# Datasources declared here are seeded into the same store used by the UI.
+# They appear in the UI as view-only and remain managed by this file.
+# Connector credentials still come from each ingestor's environment or secret.
+rag_sources: []
+  # Slack channel
+  # - source_type: "slack_channel"
+  #   channel_id: "C1234567890"
+  #   name: "team-updates"
+  #   description: "Team updates channel"
+  #   lookback_days: 30
+  #   include_bots: false
+  #   owner_team: "primary"
+  #   search_with_teams: ["secondary"]
+  #   visibility: "global"
+  #   default_chunk_size: 10000
+  #   default_chunk_overlap: 2000
+  #   reload_interval: 86400
+
+  # Confluence page tree
+  # - source_type: "confluence_space"
+  #   space_key: "DOC"
+  #   start_page_url: "https://confluence.example.com/wiki/spaces/DOC/pages/123/Overview"
+  #   name: "documentation"
+  #   search_with_teams: ["primary"]
+  #   get_child_pages: true
+  #   allowed_title_patterns: ["Guide.*"]
+  #   denied_title_patterns: ["Archive.*"]
+
+  # Jira project query
+  # - source_type: "jira_project"
+  #   project_key: "EXAMPLE"
+  #   source_slug: "primary"
+  #   name: "example-project"
+  #   search_with_teams: ["primary"]
+  #   jql: "project = EXAMPLE ORDER BY updated DESC"
+  #   include_comments: true
+  #   include_links: true
+  #   custom_fields:
+  #     severity: "customfield_10001"
+
+  # Website
+  # - source_type: "web_url"
+  #   url: "https://docs.example.com"
+  #   name: "example-docs"
+  #   search_with_teams: ["primary"]
+  #   settings:
+  #     crawl_mode: "sitemap"
+  #     max_pages: 500
+  #     respect_robots_txt: true
+
+  # Webex space
+  # - source_type: "webex_space"
+  #   space_id: "example-space-id"
+  #   name: "team-space"
+  #   search_with_teams: ["primary"]
+  #   include_bots: false

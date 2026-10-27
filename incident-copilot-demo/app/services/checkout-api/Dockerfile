@@ -1,0 +1,7 @@
+FROM python:3.12-slim
+ARG APP_VERSION=dev
+ENV APP_VERSION=$APP_VERSION PYTHONUNBUFFERED=1
+WORKDIR /srv
+COPY . /srv
+USER 65534
+CMD ["python", "app.py"]

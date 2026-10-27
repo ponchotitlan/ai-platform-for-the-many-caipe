@@ -1,0 +1,43 @@
+# checkout-api v1.4.0: BROKEN: gateway timeout lowered 5000 -> 500 ms
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-api
+  namespace: ledgerlite
+  labels: {app: ledgerlite, tier: checkout}
+  annotations:
+    kubernetes.io/change-cause: "release 1.4.0: tune gateway timeout"
+    deploy.ledgerlite/change: "timeout 5000->500"
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: ledgerlite, tier: checkout}
+  template:
+    metadata:
+      labels: {app: ledgerlite, tier: checkout}
+      annotations:
+        kubernetes.io/change-cause: "release 1.4.0: tune gateway timeout"
+        deploy.ledgerlite/change: "timeout 5000->500"
+    spec:
+      containers:
+        - name: checkout-api
+          image: ledgerlite/checkout-api:v1.4.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - {name: GATEWAY_URL, value: "http://payments-gateway:8080/charge"}
+            - {name: GATEWAY_TIMEOUT_MS, value: "500"}
+            - {name: GATEWAY_RETRIES, value: "2"}
+            - {name: DB_HOST, value: postgres}
+          ports: [{containerPort: 8080}]
+          readinessProbe:
+            httpGet: {path: /ready, port: 8080}
+            periodSeconds: 5
+            failureThreshold: 1
+          livenessProbe:
+            httpGet: {path: /healthz, port: 8080}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            requests: {cpu: 20m, memory: 32Mi}
+            limits: {memory: 128Mi}

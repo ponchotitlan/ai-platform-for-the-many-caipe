@@ -1,0 +1,38 @@
+# Mock payment provider. Healthy; answers in 2 to 4.5 s for 90% of charges.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-gateway
+  namespace: ledgerlite
+  labels: {app: ledgerlite, tier: payments}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: ledgerlite, tier: payments}
+  template:
+    metadata:
+      labels: {app: ledgerlite, tier: payments}
+    spec:
+      containers:
+        - name: payments-gateway
+          image: ledgerlite/payments-gateway:v2.0.1
+          imagePullPolicy: IfNotPresent
+          env:
+            - {name: GATEWAY_SLOW_RATIO, value: "0.9"}
+          ports: [{containerPort: 8080}]
+          readinessProbe:
+            httpGet: {path: /health, port: 8080}
+            periodSeconds: 5
+          resources:
+            requests: {cpu: 20m, memory: 32Mi}
+            limits: {memory: 128Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-gateway
+  namespace: ledgerlite
+  labels: {app: ledgerlite, tier: payments}
+spec:
+  selector: {app: ledgerlite, tier: payments}
+  ports: [{port: 8080, targetPort: 8080}]

@@ -1,0 +1,13 @@
+# secrets
+.env
+.env.*
+!.env.example
+!*.env.example
+.kube/
+*.kubeconfig
+# local state
+eval/results/*.tmp
+__pycache__/
+.venv/
+node_modules/
+.DS_Store
