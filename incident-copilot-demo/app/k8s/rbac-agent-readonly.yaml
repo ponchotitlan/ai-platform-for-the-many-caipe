@@ -1,0 +1,43 @@
+# Read-only identity for the incident copilot's cluster tools. Namespace-scoped, no secrets, no write verbs.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: copilot-readonly
+  namespace: ledgerlite
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: copilot-readonly
+  namespace: ledgerlite
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "services", "endpoints", "events", "configmaps"]
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: copilot-readonly
+  namespace: ledgerlite
+subjects:
+  - kind: ServiceAccount
+    name: copilot-readonly
+    namespace: ledgerlite
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: copilot-readonly
+---
+# Long-lived token for the ServiceAccount (read by scripts/agent-kubeconfig.sh).
+apiVersion: v1
+kind: Secret
+metadata:
+  name: copilot-readonly-token
+  namespace: ledgerlite
+  annotations:
+    kubernetes.io/service-account.name: copilot-readonly
+type: kubernetes.io/service-account-token

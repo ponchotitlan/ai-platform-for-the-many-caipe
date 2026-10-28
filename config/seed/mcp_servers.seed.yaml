@@ -1,0 +1,11 @@
+# REFERENCE ONLY. Not loaded by CAIPE: config/caipe-app-config.yaml keeps `mcp_servers: []`.
+# Onboard this server by hand in the CAIPE UI (see docs/PHASE1_MANUAL_ONBOARDING.md); the values below are what to type.
+# To seed it instead, paste this list under `mcp_servers:` in config/caipe-app-config.yaml and recreate caipe-ui:
+#   docker compose up -d --force-recreate --no-deps caipe-ui
+mcp_servers:
+  - id: "k8s-readonly"
+    name: "Kubernetes (read-only)"
+    description: "Upstream containers/kubernetes-mcp-server in read-only mode: list/get resources, pod logs, events. No write tools."
+    transport: "http"
+    endpoint: "http://k8s-readonly-mcp:8000/mcp"
+    enabled: true

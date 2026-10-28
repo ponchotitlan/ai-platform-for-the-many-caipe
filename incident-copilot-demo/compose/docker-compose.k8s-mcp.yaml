@@ -1,0 +1,25 @@
+# Read-only Kubernetes MCP server: the upstream containers/kubernetes-mcp-server, no custom code.
+# Joins CAIPE's default network (so the gateway can reach http://k8s-readonly-mcp:8000/mcp) and the
+# `kind` network (so it can reach the API server). Compose resolves relative paths against the install
+# dir, hence DEMO_KUBECONFIG (absolute, set by scripts/mcp-up.sh).
+#   --read-only   expose only tools annotated readOnlyHint
+#   --stateless   the CAIPE UI probe calls tools/list right after initialize, without the initialized notification
+services:
+  k8s-readonly-mcp:
+    image: ghcr.io/containers/kubernetes-mcp-server:v0.0.67
+    container_name: k8s-readonly-mcp
+    restart: unless-stopped
+    # The kubeconfig is mode 600 (a token); run as the file owner instead of loosening it.
+    user: "${DEMO_UID:-1000}:${DEMO_GID:-1000}"
+    command:
+      - --port=8000
+      - --read-only
+      - --stateless
+      - --toolsets=core
+      - --kubeconfig=/kube/config
+    volumes:
+      - ${DEMO_KUBECONFIG:?run scripts/mcp-up.sh}:/kube/config:ro
+    networks: [default, kind]
+networks:
+  kind:
+    external: true

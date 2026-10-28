@@ -24,5 +24,6 @@ kubectl apply -f "$K8S/00-namespace.yaml"
 kubectl apply -f "$K8S/postgres.yaml" -f "$K8S/payments-gateway.yaml" -f "$K8S/web-frontend.yaml" -f "$K8S/checkout-api.service.yaml"
 kubectl -n "$NS" rollout status deploy/postgres deploy/payments-gateway deploy/web-frontend --timeout=120s
 
+"$ROOT/scripts/agent-kubeconfig.sh"
 "$ROOT/scripts/reset-fault.sh"
 echo "LedgerLite is up at $FRONTEND_URL (checkout-api v1.4.0 is broken on purpose)."
