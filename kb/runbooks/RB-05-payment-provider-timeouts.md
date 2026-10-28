@@ -10,9 +10,13 @@ tags: [payments, provider, gateway]
 # Payment provider timeouts
 
 ## Symptoms
+
+*RB-05 · Payment provider timeouts · updated 2026-03-18*
 Payments fail with timeouts or `502` responses. The cause may be on the provider side, in the `payments-gateway` service that fronts it, or in our own timeout settings.
 
 ## Checks (in order)
+
+*RB-05 · Payment provider timeouts · updated 2026-03-18*
 1. Check the `payments-gateway` pod: is it Ready, has it restarted?
 2. Read its logs for upstream errors and latency figures.
 3. Check the provider status page and any provider incident notices.
@@ -20,15 +24,23 @@ Payments fail with timeouts or `502` responses. The cause may be on the provider
 5. Compare that latency with the timeout configured in `checkout-api` (`GATEWAY_TIMEOUT_MS`). A timeout shorter than normal gateway latency causes failures even when the provider is healthy.
 
 ## Likely causes
+
+*RB-05 · Payment provider timeouts · updated 2026-03-18*
 A real provider outage (the provider status page confirms it), gateway overload, or a client timeout that is too short.
 
 ## Safe actions
+
+*RB-05 · Payment provider timeouts · updated 2026-03-18*
 Read-only checks. Do not declare a provider outage until the provider's own status and the gateway logs agree.
 
 ## Actions that need approval
+
+*RB-05 · Payment provider timeouts · updated 2026-03-18*
 Switching payment providers, scaling the gateway, or changing timeouts.
 
 ## When to escalate
+
+*RB-05 · Payment provider timeouts · updated 2026-03-18*
 Provider confirms an outage: raise severity per RB-07 and use the customer wording in RB-08.
 
 Past case: PM-02.
