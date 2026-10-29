@@ -8,7 +8,8 @@ agents:
     description: "Answers from the LedgerLite runbooks, past incidents and product docs, and always cites the source IDs."
     model_id: "gpt-4o"
     model_provider: "openai"
-    visibility: "global"
+    visibility: "team"
+    shared_with_teams: ["oncall", "owner"]
     enabled: true
     allowed_tools:
       knowledge-base:

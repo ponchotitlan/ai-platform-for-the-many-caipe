@@ -9,3 +9,12 @@ mcp_servers:
     transport: "http"
     endpoint: "http://k8s-readonly-mcp:8000/mcp"
     enabled: true
+  # Phase 3. The install's bundled mcp-jira (profile `jira`); credentials come from the install's .env
+  # (ATLASSIAN_*), so the registration has NO credential source. The server exposes ~62 tools including
+  # delete_issue: each agent's allowed_tools is the real restriction (see agents.seed.yaml).
+  - id: "jira"
+    name: "Jira"
+    description: "Jira Cloud (project AIPLATFORM). Copilot: get_issue, search, add_comment, get_transitions, transition_issue. Support: get_issue, search."
+    transport: "http"
+    endpoint: "http://mcp-jira:8000/mcp"
+    enabled: true

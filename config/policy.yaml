@@ -1,0 +1,56 @@
+# Who can reach what. Plain-file view of the permission model for the talk (SPEC section 4).
+# CAIPE enforces it with team grants, per-agent allowed_tools and interrupt_on; this file is NOT read by CAIPE.
+# `enforced_by` says where each rule really lives, so the slide and the system cannot drift apart silently.
+personas:
+  support:
+    team: support
+    user: joao.silva
+    agents: [support-agent]
+    knowledge_bases: [ledgerlite-product-docs]
+    tools: [knowledge-base.search, knowledge-base.fetch_document, jira.get_issue, jira.search]
+    skills: [jira-board]
+    writes: []
+  oncall:
+    team: oncall
+    user: beatriz.santos
+    agents: [incident-copilot, knowledge-agent]   # copilot reaches the knowledge base only through the knowledge-agent subagent
+    knowledge_bases: [ledgerlite-runbooks, ledgerlite-incidents, ledgerlite-product-docs]
+    tools:
+      - k8s-readonly.pods_list_in_namespace
+      - k8s-readonly.pods_get
+      - k8s-readonly.pods_log
+      - k8s-readonly.events_list
+      - k8s-readonly.resources_list
+      - k8s-readonly.resources_get
+      - jira.get_issue
+      - jira.search
+      - jira.get_transitions
+    skills: [jira-board]
+    writes:
+      - tool: jira.add_comment
+        approval: none              # diagnosis comment, prefixed [Incident Copilot]
+      - tool: jira.transition_issue
+        approval: required          # interrupt_on in the agent record; only To Do -> In Progress
+        show_fields: [issue_key, transition_id]
+  owner:
+    team: owner
+    user: miguel.ferreira
+    agents: [incident-copilot, knowledge-agent, support-agent]
+    knowledge_bases: [ledgerlite-runbooks, ledgerlite-incidents, ledgerlite-product-docs]
+    tools: same as oncall (knowledge lookups via the subagent)
+    writes: [same as oncall]
+    notes: Auditor view; reads traces and cost in Langfuse.
+
+deny_always:
+  - cluster rollout undo / scale / delete / exec / patch
+  - jira.create_issue, update_issue, delete_issue and every Jira tool not listed above
+  - tickets without the label demo-ledgerlite (JQL in the skill and the prompts; not enforced by Jira permissions)
+  - moving a ticket to Done (humans only; prompt rule, not enforced)
+
+enforced_by:
+  agent_access: team grants on each agent (CAIPE UI, Admin > Teams)
+  kb_access: team grants on each datasource (CAIPE UI, Admin > Teams > Knowledge Bases)
+  tool_allowlist: allowed_tools in each agent record (Jira exposes ~62 tools; only five are allowed)
+  cluster_read_only: k8s-readonly-mcp runs --read-only with a read-only ServiceAccount; no write tool exists
+  approval: interrupt_on jira.transition_issue in the incident-copilot record
+  shared_skill: jira-board (Skills catalog) attached to incident-copilot and support-agent; instructions only
