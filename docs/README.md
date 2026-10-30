@@ -163,7 +163,7 @@ A skill is a markdown instruction document that agents load. **It teaches a proc
 | **Name** | `jira-board` |
 | **Content** | Paste the file. Description is the `description:` line of its header, the rest is the body |
 
-> ⚠️ **Create it by hand. Do not import the zip.** With CAIPE 0.5.66, an imported skill shows as "catalog-only": no delete, no files, and an editor that never loads (decision D-38).
+> ⚠️ **Create it by hand. Do not import the zip.** With CAIPE 0.5.66, an imported skill shows as "catalog-only": no delete, no files, and an editor that never loads.
 
 ✅ **Check:** the card has Edit and Delete enabled, and *Open Files* lists `SKILL.md`.
 
@@ -546,10 +546,9 @@ sequenceDiagram
 
 | | Note |
 | --- | --- |
-| 🏷️ | **The ticket label filter is a convention, not a lock.** The agents are told to use only tickets labelled `demo-ledgerlite`, but Jira itself does not block the others (decisions D-36, D-49). |
-| 🤝 | **The Incident Copilot is read-only by instruction and approval**, not by construction: it cannot write to the cluster, but its sub-agent can, after a person approves (D-46). |
-| 🔌 | **The Jira server's comments are plain text.** The bundled Jira server in this CAIPE version cannot render bold or tables, so the diagnosis uses emojis and a fixed layout (D-44). |
+| 🏷️ | **The ticket label filter is a convention, not a lock.** The agents are told to use only tickets labelled `demo-ledgerlite`, but Jira itself does not block the others. |
+| 🤝 | **The Incident Copilot is read-only by instruction and approval**, not by construction: it cannot write to the cluster, but its sub-agent can, after a person approves. |
+| 🔌 | **The Jira server's comments are plain text.** The bundled Jira server in this CAIPE version cannot render bold or tables, so the diagnosis uses emojis and a fixed layout. |
 | 🧪 | **Still to confirm in your setup:** that an approval card appears when a sub-agent proposes a write, and how long the Deployment card looks on screen. |
-| 📖 | **More detail:** the full [spec](SPEC.md), every [decision and trade-off](DECISIONS.md), and the earlier [phase-by-phase guides](PHASE3_MANUAL_ONBOARDING.md). |
 
 > Everything in this demo is synthetic: fictional customers, fictional payments, a made-up app. 🧪

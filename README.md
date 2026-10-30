@@ -99,44 +99,14 @@ flowchart LR
     E -- "❌ no" --> G["🛑 Nothing changes"]
 ```
 
-This is the workflow:
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant C as 😟 Indira (customer)
-    participant J as 🎫 Jira
-    participant S as 🎧 João (support)
-    participant O as 🧑‍🔧 Beatriz (on-call)
-    participant P as 🤖 Incident Copilot
-    participant K as ☸️ Cluster Agent
-    participant L as 📚 Knowledge Agent
-
-    C->>J: Reports "I can't pay my invoice"
-    S->>J: Asks the Support Agent for the open tickets
-    Note over S,J: 🎧 The Support Agent reads the ticket<br/>and drafts a friendly, safe reply
-    O->>P: "Work on this ticket"
-    P->>K: Investigate the cluster (read-only)
-    K-->>P: Checkout restarts, failing probes, a timeout changed 5000 to 500
-    P->>L: What do our runbooks and past incidents say?
-    L-->>P: Cited answer, and a warning that two documents disagree
-    P->>J: Adds the diagnosis as a comment
-    P->>O: Asks to move the ticket to In Progress
-    O-->>P: ✅ Approve
-    P->>J: Ticket moves to In Progress
-    O->>K: In the Cluster Agent chat: "Roll back the deploy"
-    K->>O: Shows the exact change and waits
-    O-->>K: ❌ Reject (nothing changes)
-```
-
 ### 🪤 What is planted for you to find
 
 | 🎯 The trap | What it tests |
 | --- | --- |
-| **A bad rollout.** `checkout-api` v1.4.0 changed a timeout from 5000 ms to 500 ms. The mock payment gateway answers in 2 to 5 seconds, so most payments fail. | Can the agents find the *real* cause? |
-| **Two red herrings.** The runbooks about *database connections* and *payment provider outages* look relevant, but the checks come back normal. | Do the agents stay calm and rule things out? |
-| **Contradicting documents.** An old runbook says "restart the pod first". A newer postmortem says restarting made it worse. | Does the agent show both and say which it prefers? |
-| **A shared Jira project.** Other people's tickets live next to the demo ones. | Do the agents stay in their lane? |
+| **A bad rollout** `checkout-api` v1.4.0 changed a timeout from 5000 ms to 500 ms. The mock payment gateway answers in 2 to 5 seconds, so most payments fail. | Can the agents find the *real* cause? |
+| **Two red herrings** The runbooks about *database connections* and *payment provider outages* look relevant, but the checks come back normal. | Do the agents stay calm and rule things out? |
+| **Contradicting documents** An old runbook says "restart the pod first". A newer postmortem says restarting made it worse. | Does the agent show both and say which it prefers? |
+| **A shared Jira project** Other people's tickets live next to the demo ones. | Do the agents stay in their lane? |
 
 ---
 
