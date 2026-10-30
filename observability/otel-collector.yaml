@@ -1,0 +1,38 @@
+# Scrapes CAIPE Prometheus metrics and forwards them to Splunk Cloud over HEC (metrics index).
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: caipe-dynamic-agents
+          scrape_interval: 30s
+          static_configs:
+            - targets: ["dynamic-agents:8001"]
+          metric_relabel_configs:
+            # Keep only the series the dashboard uses (drops python_/process_ noise, cache, *_created, summaries).
+            - source_labels: [__name__]
+              regex: "da_(turns_total|turn_duration_seconds.*|turn_time_to_first_response_seconds.*|llm_calls_total|llm_(input|output)_tokens_total|llm_call_duration_seconds.*|tool_calls_total|tool_call_duration_seconds.*|active_streams|active_requests|request_duration_seconds.*)"
+              action: keep
+
+processors:
+  batch: {}
+  resource:
+    attributes:
+      - { key: deployment.environment, value: "${env:CAIPE_ENV}", action: upsert }
+      - { key: service.name, value: caipe, action: upsert }
+
+exporters:
+  splunk_hec:
+    endpoint: "${env:SPLUNK_HEC_URL}/services/collector"
+    token: "${env:SPLUNK_HEC_TOKEN}"
+    index: "${env:SPLUNK_METRICS_INDEX}"
+    source: caipe
+    sourcetype: caipe:metrics
+    tls:
+      insecure_skip_verify: ${env:SPLUNK_HEC_INSECURE_SKIP_VERIFY}
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [resource, batch]
+      exporters: [splunk_hec]

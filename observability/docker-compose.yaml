@@ -1,0 +1,54 @@
+# Splunk export sidecars for CAIPE. Joins the main stack's network; does not modify it.
+#   docker compose --env-file .env up -d                     # real Splunk Cloud HEC
+#   docker compose --env-file .env --profile test up -d      # + local mock HEC (set SPLUNK_HEC_URL=http://mock-hec:8088, token=test-token)
+name: caipe-splunk-export
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.111.0
+    container_name: caipe-otel-collector
+    command: ["--config=/etc/otelcol/config.yaml"]
+    environment:
+      - SPLUNK_HEC_URL
+      - SPLUNK_HEC_TOKEN
+      - SPLUNK_METRICS_INDEX
+      - SPLUNK_HEC_INSECURE_SKIP_VERIFY
+      - CAIPE_ENV
+    volumes:
+      - ./otel-collector.yaml:/etc/otelcol/config.yaml:ro
+    networks: [caipe]
+    restart: unless-stopped
+
+  events-poller:
+    build: { context: ., dockerfile: Dockerfile.poller }
+    image: caipe-splunk-poller:local
+    container_name: caipe-splunk-poller
+    environment:
+      - SPLUNK_HEC_URL
+      - SPLUNK_HEC_TOKEN
+      - SPLUNK_EVENTS_INDEX
+      - SPLUNK_HEC_INSECURE_SKIP_VERIFY
+      - LANGFUSE_HOST=http://langfuse-web:3000
+      - LANGFUSE_PUBLIC_KEY
+      - LANGFUSE_SECRET_KEY
+      - MONGODB_URI
+      - HASH_USER_IDS
+      - POLL_INTERVAL
+    volumes:
+      - poller_state:/state
+    networks: [caipe]
+    restart: unless-stopped
+
+  mock-hec:
+    profiles: [test]
+    image: caipe-splunk-poller:local
+    container_name: caipe-mock-hec
+    command: ["python", "-u", "mock_hec.py"]
+    networks: [caipe]
+
+volumes:
+  poller_state:
+
+networks:
+  caipe:
+    external: true
+    name: ai-platform-engineering_default

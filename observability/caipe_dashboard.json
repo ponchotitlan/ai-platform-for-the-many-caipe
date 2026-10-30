@@ -1,0 +1,711 @@
+{
+  "title": "CAIPE Admin Overview",
+  "description": "Usage, LLM spend, performance and tool health for the CAIPE platform. Metadata only.",
+  "inputs": {
+    "input_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_team": {
+      "type": "input.dropdown",
+      "title": "Team",
+      "options": {
+        "token": "team",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All",
+            "value": "*"
+          },
+          {
+            "label": "support",
+            "value": "support"
+          },
+          {
+            "label": "oncall",
+            "value": "oncall"
+          },
+          {
+            "label": "owner",
+            "value": "owner"
+          },
+          {
+            "label": "super-admins",
+            "value": "super-admins"
+          }
+        ]
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "k_req": {
+      "type": "splunk.singlevalue",
+      "title": "Requests",
+      "dataSources": {
+        "primary": "ds_k_req"
+      },
+      "options": {
+        "majorColor": "#1A73E8"
+      }
+    },
+    "k_users": {
+      "type": "splunk.singlevalue",
+      "title": "Active users",
+      "dataSources": {
+        "primary": "ds_k_users"
+      },
+      "options": {}
+    },
+    "k_spend": {
+      "type": "splunk.singlevalue",
+      "title": "Spend (USD)",
+      "dataSources": {
+        "primary": "ds_k_spend"
+      },
+      "options": {
+        "numberPrefix": "$"
+      }
+    },
+    "k_tok": {
+      "type": "splunk.singlevalue",
+      "title": "Tokens",
+      "dataSources": {
+        "primary": "ds_k_tok"
+      },
+      "options": {
+        "unitPosition": "after"
+      }
+    },
+    "k_p95": {
+      "type": "splunk.singlevalue",
+      "title": "p95 request latency (s)",
+      "dataSources": {
+        "primary": "ds_k_p95"
+      },
+      "options": {}
+    },
+    "k_err": {
+      "type": "splunk.singlevalue",
+      "title": "Tool error rate (%)",
+      "dataSources": {
+        "primary": "ds_k_err"
+      },
+      "options": {
+        "numberSuffix": "%"
+      }
+    },
+    "h1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "## Adoption",
+        "fontSize": "large"
+      }
+    },
+    "c_req_agent": {
+      "type": "splunk.column",
+      "title": "Requests by agent",
+      "dataSources": {
+        "primary": "ds_c_req_agent"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    },
+    "c_req_team": {
+      "type": "splunk.column",
+      "title": "Requests by team",
+      "dataSources": {
+        "primary": "ds_c_req_team"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    },
+    "t_users": {
+      "type": "splunk.table",
+      "title": "Usage by user",
+      "dataSources": {
+        "primary": "ds_t_users"
+      },
+      "options": {}
+    },
+    "h2": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "## LLM usage and cost",
+        "fontSize": "large"
+      }
+    },
+    "c_tok_agent": {
+      "type": "splunk.column",
+      "title": "Tokens by agent",
+      "dataSources": {
+        "primary": "ds_c_tok_agent"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    },
+    "c_cost_model": {
+      "type": "splunk.column",
+      "title": "Spend by model (USD)",
+      "dataSources": {
+        "primary": "ds_c_cost_model"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    },
+    "t_cost_team": {
+      "type": "splunk.table",
+      "title": "Spend and tokens by team",
+      "dataSources": {
+        "primary": "ds_t_cost_team"
+      },
+      "options": {}
+    },
+    "t_outliers": {
+      "type": "splunk.table",
+      "title": "Costliest requests (loop-depth outliers)",
+      "dataSources": {
+        "primary": "ds_t_outliers"
+      },
+      "options": {}
+    },
+    "h3": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "## Performance",
+        "fontSize": "large"
+      }
+    },
+    "l_lat": {
+      "type": "splunk.table",
+      "title": "Request latency p50 / p95 by agent (s)",
+      "dataSources": {
+        "primary": "ds_l_lat"
+      },
+      "options": {}
+    },
+    "l_ttfr": {
+      "type": "splunk.line",
+      "title": "Avg time to first response (s)",
+      "dataSources": {
+        "primary": "ds_l_ttfr"
+      },
+      "options": {}
+    },
+    "c_turns_status": {
+      "type": "splunk.column",
+      "title": "Turns by outcome",
+      "dataSources": {
+        "primary": "ds_c_turns_status"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    },
+    "l_llm_lat": {
+      "type": "splunk.line",
+      "title": "Avg LLM call latency by model (s)",
+      "dataSources": {
+        "primary": "ds_l_llm_lat"
+      },
+      "options": {}
+    },
+    "h4": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "## Tools and MCP servers",
+        "fontSize": "large"
+      }
+    },
+    "c_tool_calls": {
+      "type": "splunk.bar",
+      "title": "Tool calls by tool",
+      "dataSources": {
+        "primary": "ds_c_tool_calls"
+      },
+      "options": {}
+    },
+    "t_tool_health": {
+      "type": "splunk.table",
+      "title": "Tool health (calls, error %, avg latency s)",
+      "dataSources": {
+        "primary": "ds_t_tool_health"
+      },
+      "options": {}
+    }
+  },
+  "dataSources": {
+    "ds_k_req": {
+      "type": "ds.search",
+      "name": "Requests",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:trace teams{}=\"$team$\" | stats count",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_k_users": {
+      "type": "ds.search",
+      "name": "Active users",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:trace teams{}=\"$team$\" | stats dc(user) AS users",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_k_spend": {
+      "type": "ds.search",
+      "name": "Spend (USD)",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:llm_call teams{}=\"$team$\" | stats sum(cost_usd) AS spend | eval spend=round(spend,2)",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_k_tok": {
+      "type": "ds.search",
+      "name": "Tokens",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:llm_call teams{}=\"$team$\" | stats sum(total_tokens) AS tokens",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_k_p95": {
+      "type": "ds.search",
+      "name": "p95 request latency (s)",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:trace teams{}=\"$team$\" | stats perc95(latency_s) AS p95 | eval p95=round(p95,1)",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_k_err": {
+      "type": "ds.search",
+      "name": "Tool error rate (%)",
+      "options": {
+        "query": "| mstats rate_sum(da_tool_calls_total) AS r WHERE index=caipe_metrics span=5m BY status | eval n=r*300 | stats sum(n) AS tot sum(eval(if(status!=\"success\",n,0))) AS bad | eval pct=round(100*bad/tot,2) | fields pct",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_c_req_agent": {
+      "type": "ds.search",
+      "name": "Requests by agent",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:trace teams{}=\"$team$\" | timechart span=1h count BY agent",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_c_req_team": {
+      "type": "ds.search",
+      "name": "Requests by team",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:trace teams{}=\"$team$\" | mvexpand teams{} | rename teams{} AS teams | timechart span=1h count BY teams",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_t_users": {
+      "type": "ds.search",
+      "name": "Usage by user",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:trace teams{}=\"$team$\" | stats count AS requests dc(session_id) AS conversations sum(cost_usd) AS spend_usd latest(_time) AS last_seen BY user | eval spend_usd=round(spend_usd,2), last_seen=strftime(last_seen,\"%F %T\") | sort - requests",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_c_tok_agent": {
+      "type": "ds.search",
+      "name": "Tokens by agent",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:llm_call teams{}=\"$team$\" | timechart span=1h sum(total_tokens) BY agent",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_c_cost_model": {
+      "type": "ds.search",
+      "name": "Spend by model (USD)",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:llm_call teams{}=\"$team$\" | timechart span=1h sum(cost_usd) BY model",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_t_cost_team": {
+      "type": "ds.search",
+      "name": "Spend and tokens by team",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:llm_call teams{}=\"$team$\" | mvexpand teams{} | rename teams{} AS teams | stats sum(input_tokens) AS input sum(output_tokens) AS output sum(cost_usd) AS spend_usd count AS llm_calls BY teams | eval spend_usd=round(spend_usd,2) | sort - spend_usd",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_t_outliers": {
+      "type": "ds.search",
+      "name": "Costliest requests (loop-depth outliers)",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:llm_call teams{}=\"$team$\" | stats count AS llm_calls sum(input_tokens) AS input sum(output_tokens) AS output sum(cost_usd) AS cost_usd latest(agent) AS agent latest(user) AS user BY trace_id | eval cost_usd=round(cost_usd,3) | sort - cost_usd | head 10",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_l_lat": {
+      "type": "ds.search",
+      "name": "Request latency p50 / p95 by agent (s)",
+      "options": {
+        "query": "index=caipe_events sourcetype=caipe:trace teams{}=\"$team$\" | stats median(latency_s) AS p50 perc95(latency_s) AS p95 count BY agent | eval p50=round(p50,1), p95=round(p95,1)",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_l_ttfr": {
+      "type": "ds.search",
+      "name": "Avg time to first response (s)",
+      "options": {
+        "query": "| mstats rate_sum(da_turn_time_to_first_response_seconds_sum) AS s rate_sum(da_turn_time_to_first_response_seconds_count) AS c WHERE index=caipe_metrics span=1h BY agent_name | eval ttfr=round(s/c,2) | xyseries _time agent_name ttfr",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_c_turns_status": {
+      "type": "ds.search",
+      "name": "Turns by outcome",
+      "options": {
+        "query": "| mstats rate_sum(da_turns_total) AS r WHERE index=caipe_metrics span=5m BY status | eval n=r*300 | timechart span=1h sum(n) AS n BY status",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_l_llm_lat": {
+      "type": "ds.search",
+      "name": "Avg LLM call latency by model (s)",
+      "options": {
+        "query": "| mstats rate_sum(da_llm_call_duration_seconds_sum) AS s rate_sum(da_llm_call_duration_seconds_count) AS c WHERE index=caipe_metrics span=1h BY model_id | eval lat=round(s/c,2) | xyseries _time model_id lat",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_c_tool_calls": {
+      "type": "ds.search",
+      "name": "Tool calls by tool",
+      "options": {
+        "query": "| mstats rate_sum(da_tool_calls_total) AS r WHERE index=caipe_metrics span=5m BY tool_name | eval n=r*300 | stats sum(n) AS calls BY tool_name | eval calls=round(calls,0) | sort - calls | head 15",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    },
+    "ds_t_tool_health": {
+      "type": "ds.search",
+      "name": "Tool health (calls, error %, avg latency s)",
+      "options": {
+        "query": "| mstats rate_sum(da_tool_calls_total) AS c rate_sum(da_tool_call_duration_seconds_sum) AS d WHERE index=caipe_metrics span=5m BY tool_name status | eval n=c*300, dur=d*300 | stats sum(n) AS calls sum(dur) AS dur sum(eval(if(status!=\"success\",n,0))) AS errors BY tool_name | eval calls=round(calls,0), error_pct=round(100*errors/calls,2), avg_latency_s=round(dur/calls,2) | table tool_name calls error_pct avg_latency_s | sort - calls",
+        "queryParameters": {
+          "earliest": "$global_time.earliest$",
+          "latest": "$global_time.latest$"
+        }
+      }
+    }
+  },
+  "layout": {
+    "type": "absolute",
+    "options": {
+      "width": 1260,
+      "height": 2280,
+      "display": "auto"
+    },
+    "structure": [
+      {
+        "item": "k_req",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 70,
+          "w": 200,
+          "h": 110
+        }
+      },
+      {
+        "item": "k_users",
+        "type": "block",
+        "position": {
+          "x": 210,
+          "y": 70,
+          "w": 200,
+          "h": 110
+        }
+      },
+      {
+        "item": "k_spend",
+        "type": "block",
+        "position": {
+          "x": 420,
+          "y": 70,
+          "w": 200,
+          "h": 110
+        }
+      },
+      {
+        "item": "k_tok",
+        "type": "block",
+        "position": {
+          "x": 630,
+          "y": 70,
+          "w": 200,
+          "h": 110
+        }
+      },
+      {
+        "item": "k_p95",
+        "type": "block",
+        "position": {
+          "x": 840,
+          "y": 70,
+          "w": 200,
+          "h": 110
+        }
+      },
+      {
+        "item": "k_err",
+        "type": "block",
+        "position": {
+          "x": 1050,
+          "y": 70,
+          "w": 200,
+          "h": 110
+        }
+      },
+      {
+        "item": "h1",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 190,
+          "w": 1250,
+          "h": 30
+        }
+      },
+      {
+        "item": "c_req_agent",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 225,
+          "w": 620,
+          "h": 280
+        }
+      },
+      {
+        "item": "c_req_team",
+        "type": "block",
+        "position": {
+          "x": 630,
+          "y": 225,
+          "w": 620,
+          "h": 280
+        }
+      },
+      {
+        "item": "t_users",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 515,
+          "w": 1250,
+          "h": 240
+        }
+      },
+      {
+        "item": "h2",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 765,
+          "w": 1250,
+          "h": 30
+        }
+      },
+      {
+        "item": "c_tok_agent",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 800,
+          "w": 620,
+          "h": 280
+        }
+      },
+      {
+        "item": "c_cost_model",
+        "type": "block",
+        "position": {
+          "x": 630,
+          "y": 800,
+          "w": 620,
+          "h": 280
+        }
+      },
+      {
+        "item": "t_cost_team",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 1090,
+          "w": 620,
+          "h": 250
+        }
+      },
+      {
+        "item": "t_outliers",
+        "type": "block",
+        "position": {
+          "x": 630,
+          "y": 1090,
+          "w": 620,
+          "h": 250
+        }
+      },
+      {
+        "item": "h3",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 1350,
+          "w": 1250,
+          "h": 30
+        }
+      },
+      {
+        "item": "l_lat",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 1385,
+          "w": 620,
+          "h": 260
+        }
+      },
+      {
+        "item": "l_ttfr",
+        "type": "block",
+        "position": {
+          "x": 630,
+          "y": 1385,
+          "w": 620,
+          "h": 260
+        }
+      },
+      {
+        "item": "c_turns_status",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 1655,
+          "w": 620,
+          "h": 260
+        }
+      },
+      {
+        "item": "l_llm_lat",
+        "type": "block",
+        "position": {
+          "x": 630,
+          "y": 1655,
+          "w": 620,
+          "h": 260
+        }
+      },
+      {
+        "item": "h4",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 1925,
+          "w": 1250,
+          "h": 30
+        }
+      },
+      {
+        "item": "c_tool_calls",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 1960,
+          "w": 620,
+          "h": 300
+        }
+      },
+      {
+        "item": "t_tool_health",
+        "type": "block",
+        "position": {
+          "x": 630,
+          "y": 1960,
+          "w": 620,
+          "h": 300
+        }
+      }
+    ],
+    "globalInputs": [
+      "input_time",
+      "input_team"
+    ]
+  }
+}
