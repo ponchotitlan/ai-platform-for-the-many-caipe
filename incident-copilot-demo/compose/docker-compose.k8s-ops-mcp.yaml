@@ -1,0 +1,23 @@
+# Write-enabled Kubernetes MCP server for the Cluster Agent: same upstream image as k8s-readonly-mcp, different identity.
+#   no --read-only            write tools exist; the ServiceAccount (rbac-agent-ops.yaml) may only get/list/patch/update deployments
+#   no --disable-destructive  tried first, but upstream marks resources_create_or_update as destructive, so the flag removed the
+#                             one tool the Cluster Agent needs (D-48). The limits are RBAC and the agent's allowed_tools.
+# Reads still go through k8s-readonly-mcp. The agent's allowed_tools and interrupt_on limit this server to one approved tool.
+# The server also exposes delete, exec and run tools; Kubernetes refuses them because the account has no such rights.
+services:
+  k8s-ops-mcp:
+    image: ghcr.io/containers/kubernetes-mcp-server:v0.0.67
+    container_name: k8s-ops-mcp
+    restart: unless-stopped
+    user: "${DEMO_UID:-1000}:${DEMO_GID:-1000}"
+    command:
+      - --port=8000
+      - --stateless
+      - --toolsets=core
+      - --kubeconfig=/kube/config
+    volumes:
+      - ${DEMO_OPS_KUBECONFIG:?run scripts/mcp-ops-up.sh}:/kube/config:ro
+    networks: [default, kind]
+networks:
+  kind:
+    external: true

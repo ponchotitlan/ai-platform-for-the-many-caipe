@@ -1,0 +1,40 @@
+# Write identity for the Cluster Agent's one write action: update a Deployment (rollback or restore a setting).
+# Namespace-scoped, deployments only, no create, no delete, no secrets, no exec. Reads come from copilot-readonly.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: copilot-ops
+  namespace: ledgerlite
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: copilot-ops
+  namespace: ledgerlite
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: copilot-ops
+  namespace: ledgerlite
+subjects:
+  - kind: ServiceAccount
+    name: copilot-ops
+    namespace: ledgerlite
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: copilot-ops
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: copilot-ops-token
+  namespace: ledgerlite
+  annotations:
+    kubernetes.io/service-account.name: copilot-ops
+type: kubernetes.io/service-account-token

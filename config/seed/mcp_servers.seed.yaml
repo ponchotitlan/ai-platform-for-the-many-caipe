@@ -18,3 +18,12 @@ mcp_servers:
     transport: "http"
     endpoint: "http://mcp-jira:8000/mcp"
     enabled: true
+  # Phase 3. Same upstream image as `k8s-readonly`, but write-enabled (no --read-only) with a separate ServiceAccount
+  # (rbac-agent-ops.yaml: deployments get/list/patch/update in `ledgerlite` only). Start it with scripts/mcp-ops-up.sh.
+  # Only the Cluster Agent may use it, and only `resources_create_or_update`, behind approval.
+  - id: "k8s-ops"
+    name: "Kubernetes (Deployment update)"
+    description: "Upstream containers/kubernetes-mcp-server with writes enabled. It also lists delete, exec and run tools, which Kubernetes refuses for this account. The only tool allowed for agents is resources_create_or_update."
+    transport: "http"
+    endpoint: "http://k8s-ops-mcp:8000/mcp"
+    enabled: true
