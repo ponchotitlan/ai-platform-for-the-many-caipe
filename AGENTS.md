@@ -14,6 +14,8 @@ There is no application code to build here besides a tiny fictional app (LedgerL
 | --- | --- |
 | `config/seed/*.yaml` | Reference copies of the agents and tool servers. **Not loaded by CAIPE**: a person creates each one by hand in the CAIPE UI. The prompts live here. |
 | `config/policy.yaml` | A readable map of who can reach what and where each rule is enforced. CAIPE does not read it. |
+| `config/seed/workflows.seed.yaml` | Reference copy of the "New ticket diagnosis" workflow. Created by hand in the UI. |
+| `incident-copilot-demo/trigger/` | Jira webhook receiver (stdlib Python) that starts that workflow for new labelled tickets. Started by `scripts/trigger-up.sh`. |
 | `skills/jira-board/SKILL.md` | The shared skill used by two agents. |
 | `kb/` | 20 synthetic knowledge documents (`RB-*` runbooks, `PM-*` past incidents, `PD-*` product docs). |
 | `incident-copilot-demo/` | LedgerLite: services, Kubernetes manifests (`app/k8s/`), compose files for the tool servers, helper scripts. |

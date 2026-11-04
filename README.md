@@ -269,6 +269,7 @@ The agents never close tickets. *Done* belongs to humans.
 | | Guide | What you get |
 | --- | --- | --- |
 | 🛠️ | [**Setup and running guide**](docs/README.md) | How to set up each component on a running CAIPE, what the finished UI looks like, and a step-by-step walkthrough of each persona, with room for your screenshots. |
+| 💬 | [**Slack integration guide**](slack/README.md) | How to talk to the agents from a Slack channel instead of the web UI: the Slack app, the bot, identity and channel routes, the Beatriz-from-Slack scenario, and the traps found along the way, with room for your screenshots. |
 | 🔭 | [**Observability guide**](observability/README.md) | Where CAIPE's telemetry comes from, and how it is collected and shown in Splunk. |
 | 🌐 | [**CAIPE website**](https://caipe.io/) | The CAIPE project itself: documentation, community and getting started. |
 
