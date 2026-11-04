@@ -205,9 +205,15 @@ Your user passes this check through its support role, which is why it works for 
 
 ## 4. ▶️ Run it and check it
 
-1. In `#caipe`, send `@CAIPE hello, which tickets are open?`.
-2. A plain message with no mention is ignored, since the route listens for **mentions** only.
-3. Read the bot log:
+In `#caipe`, send `@caipe which are my open tickets?`.
+
+> A plain message with no mention is ignored, since the route listens for **mentions** only.
+
+![Slack questions](images/04-slack-questions.png)
+
+## 5. 📙 Read the bot log
+
+For audit or troubleshooting purposes, you can have a look at the Slack bot logs with the following:
 
 ```bash
 docker logs --since 5m slack-bot | grep -E "invoked|mapped to team|OBO|dispatch_identity|Error"
@@ -225,7 +231,3 @@ And in `dynamic-agents`:
 ```bash
 docker logs --since 5m dynamic-agents | grep -E "loaded|MCP server|denied"
 ```
-
-✅ **Healthy:** `loaded N tools from M/M MCP servers`. ❌ `HTTP 403 … [denied]` means the user cannot call tools, see [section 6](#6--when-something-goes-wrong).
-
-![Slack questions](images/04-slack-questions.png)
