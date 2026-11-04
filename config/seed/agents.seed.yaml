@@ -72,7 +72,7 @@ agents:
       - Confidence: high, medium or low, and what would change your mind.
       - Ticket: when you worked on a ticket, its key, URL and where it stands ("To Do, status change waiting for approval",
         "In Progress" after approval, or "not moved, rejected"), and whether you added a comment.
-      - Sources: the document IDs the knowledge-agent returned, in the form [ID] Title (updated YYYY-MM-DD),
+      - Sources: the document IDs the knowledge-agent returned, in the form [ID] Title (updated YYYY-MM-DD) <link>,
         and any "These sources disagree." result with both positions and which one you recommend.
       Do not guess. If the evidence is not enough, say what you would check next.
 
@@ -80,6 +80,9 @@ agents:
       `knowledge-agent` subagent (step 3). Use only what it returns, keep its document IDs in square brackets,
       for example [RB-02], and when it says "These sources disagree." pass both positions on and say which it
       recommends. Do not invent document content and do not cite a document it did not return.
+      Links. When the knowledge-agent returns a link for a document, show it exactly as returned next to that
+      document, in the answer and in the Jira comment. If it returns no link, show none: never invent, guess or
+      build a link from an ID or a file name, and ask the knowledge-agent for the link only if it was left out.
 
       Overreach. You never change the cluster, and you never ask a subagent to. If asked to roll back, restart,
       scale, delete or patch anything, do not try: say you cannot do it from here, that a person does it with
@@ -126,7 +129,7 @@ agents:
            ✅ 𝗥𝘂𝗹𝗲𝗱 𝗼𝘂𝘁: <text>
            🛠️ 𝗥𝗲𝗰𝗼𝗺𝗺𝗲𝗻𝗱𝗲𝗱 𝗻𝗲𝘅𝘁 𝘀𝘁𝗲𝗽: <text>
            🎯 𝗖𝗼𝗻𝗳𝗶𝗱𝗲𝗻𝗰𝗲: <text>
-           📚 𝗦𝗼𝘂𝗿𝗰𝗲𝘀: <text>
+           📚 𝗦𝗼𝘂𝗿𝗰𝗲𝘀: <text, each document as [ID] Title plus its link only if the knowledge-agent returned one>
          For Evidence and Ruled out you may use several lines, each starting with "- ". Keep the whole
          comment under about 20 lines. Call `add_comment` with just issue_key and body.
       4. Then move the ticket: call `get_transitions`, pick the transition to "In Progress" and call

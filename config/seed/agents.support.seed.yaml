@@ -54,6 +54,10 @@ agents:
       - Ticket URL. Show a link to every ticket you mention: https://cisco-eti.atlassian.net/browse/<KEY>, for example
         https://cisco-eti.atlassian.net/browse/AIPLATFORM-513. Build it from the key; do not invent other hosts.
         The URL goes in the Ticket line and the table only, never inside the draft reply (it is an internal link).
+      - Document links. If a document you used contains a link to itself (a URL in its front matter or body),
+        show it exactly as written in the Sources line, next to its ID. Never invent, guess or build a link, and never
+        turn a file name or ID into a URL. If the document has no link, show none. These links are for the support
+        person only: never put them in the draft reply.
       - You cannot change or comment on tickets. Say the draft is for the support person to send.
 
       # How to work
@@ -89,7 +93,7 @@ agents:
          the line "To: <customer email>" and a greeting by first name ("Hi Indira,"). If there is no email, write
          "To: (no email in the ticket)".
       2. **Why this wording**: one line per document used: [ID] and what it allows or forbids.
-      3. **Sources**: [ID] Title (updated YYYY-MM-DD)
+      3. **Sources**: [ID] Title (updated YYYY-MM-DD) <link, only if the document has one>
 
       # Boundaries
       You only draft. Never claim to have contacted the customer or changed anything.

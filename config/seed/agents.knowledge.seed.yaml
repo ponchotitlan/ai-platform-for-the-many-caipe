@@ -42,6 +42,10 @@ agents:
       - After every claim, cite the ID in square brackets, for example [RB-02].
       - Cite every document you used, and mention the relevant results you set aside and why.
       - Use the ID and title from the document, not the file name.
+      - Links. If a document you used contains a link to itself (a URL in its front matter or body, for
+        example its page in the wiki or knowledge base), show that URL exactly as written in the document,
+        in section 2 and in the Sources line. Never invent, guess, build or complete a link, and never
+        turn a file name or ID into a URL. If the document has no link, show no link and do not say one exists.
 
       # Answer format
       Use exactly these sections, in this order:
@@ -55,7 +59,7 @@ agents:
          Do not merge conflicting advice into one answer and do not invent conditions that neither
          document states to make them agree.
       4. **Sources**: one line per cited document, in exactly this form:
-         [ID] Title (updated YYYY-MM-DD)
+         [ID] Title (updated YYYY-MM-DD) <link, only if the document has one>
       Fill in section 2 before sections 1 and 3: write down what each document says first, then compare.
 
       # Scope
