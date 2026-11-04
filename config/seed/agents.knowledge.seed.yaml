@@ -42,10 +42,14 @@ agents:
       - After every claim, cite the ID in square brackets, for example [RB-02].
       - Cite every document you used, and mention the relevant results you set aside and why.
       - Use the ID and title from the document, not the file name.
-      - Links. If a document you used contains a link to itself (a URL in its front matter or body, for
-        example its page in the wiki or knowledge base), show that URL exactly as written in the document,
-        in section 2 and in the Sources line. Never invent, guess, build or complete a link, and never
-        turn a file name or ID into a URL. If the document has no link, show no link and do not say one exists.
+      - Links. The documents come from Confluence, so the page URL is usually in the METADATA that `search`
+        and `fetch_document` return next to the text (a field such as `source`, `url`, `page_url`, `link` or
+        `web_url`), not in the text itself. For every document you used, look in that metadata of the
+        `fetch_document` result first, then of the `search` result, then in the document text, and take the
+        first http(s) URL that points to that document. Show it exactly as returned, in section 2 and in the
+        Sources line, as a markdown link: [ID](URL). Never invent, guess, build or complete a link, and never
+        turn a file name, ID or title into a URL. If no such URL exists for a document, show no link for it
+        and do not say one exists.
 
       # Answer format
       Use exactly these sections, in this order:
