@@ -1,10 +1,7 @@
 # 🛠️ Setup and walkthrough
 
-How to build the **Incident Copilot** demo on top of a running CAIPE, piece by piece, and what it looks like when it works.
+How to build the demo on top of a running CAIPE, piece by piece, and what it looks like when it works.
 Then a step-by-step tour of what each person does with it.
-
-> 📸 **Screenshots.** Every `📸` box below is a placeholder. Save your image under [`docs/images/`](images/) with the suggested name,
-> then uncomment the matching `![...]` line right under the box.
 
 **On this page**
 1. [What you need first](#1--what-you-need-first)
@@ -82,9 +79,7 @@ Menu names can differ a little between CAIPE versions. Field values below are ex
 
 ✅ **Check:** both models appear in the model picker when you create an agent.
 
-> 📸 **Screenshot:** *Model list with GPT-4o and GPT-4o Mini*
-> `docs/images/01-models.png`
-> <!-- ![Model list](images/01-models.png) -->
+![CAIPE LLM](images/01-caipe-llm.png)
 
 ---
 
@@ -120,13 +115,9 @@ kubectl --kubeconfig $KC auth can-i patch  deployments -n kube-system  # no
 - `k8s-ops` lists `resources_create_or_update` **and** delete, exec and run tools. That is expected: Kubernetes refuses the extra ones for this account, and each agent's tool list only allows one.
 - `jira` lists about 62 tools. Agents will each be allowed only a handful.
 
-> 📸 **Screenshot:** *MCP Servers tab with the three servers*
-> `docs/images/02-mcp-servers.png`
-> <!-- ![MCP servers](images/02-mcp-servers.png) -->
+![CAIPE MCP](images/02-caipe-mcp.png)
 
-> 📸 **Screenshot:** *Probe result of `k8s-ops` showing its tool list*
-> `docs/images/03-k8s-ops-tools.png`
-> <!-- ![k8s-ops tools](images/03-k8s-ops-tools.png) -->
+![CAIPE Probe](images/03-caipe-mcp-probe.png)
 
 ---
 
@@ -144,11 +135,7 @@ Steps (Knowledge Bases page): add a source from local files, select all files of
 
 ✅ **Check:** the three datasources show 8, 6 and 6 documents.
 
-> 🤔 **Why not Confluence?** In this CAIPE version a Confluence connector creates **one datasource per space**, so everything ends up under one owner. Separate uploads keep the three owners separate.
-
-> 📸 **Screenshot:** *Knowledge Bases page with the three datasources and their document counts*
-> `docs/images/04-knowledge-bases.png`
-> <!-- ![Knowledge bases](images/04-knowledge-bases.png) -->
+![CAIPE Knowledge Base](images/04-caipe-knowledge-base.png)
 
 ---
 
@@ -163,17 +150,11 @@ A skill is a markdown instruction document that agents load. **It teaches a proc
 | **Name** | `jira-board` |
 | **Content** | Paste the file. Description is the `description:` line of its header, the rest is the body |
 
-> ⚠️ **Create it by hand. Do not import the zip.** With CAIPE 0.5.66, an imported skill shows as "catalog-only": no delete, no files, and an editor that never loads.
-
 ✅ **Check:** the card has Edit and Delete enabled, and *Open Files* lists `SKILL.md`.
 
-> 📸 **Screenshot:** *Skills gallery with the `jira-board` card*
-> `docs/images/05-skill-card.png`
-> <!-- ![Skill card](images/05-skill-card.png) -->
+![CAIPE Skills](images/05-caipe-skills.png)
 
-> 📸 **Screenshot:** *Skill editor showing the Instructions and Examples sections*
-> `docs/images/06-skill-editor.png`
-> <!-- ![Skill editor](images/06-skill-editor.png) -->
+![CAIPE Edit Skill](images/06-caipe-skill-edit.png)
 
 ---
 
@@ -224,21 +205,13 @@ Seed: [`config/seed/agents.seed.yaml`](../config/seed/agents.seed.yaml)
 
 ✅ **Check:** the agent list shows four agents. Open the Incident Copilot: its tool list has only Jira tools, and its sub-agents are the Cluster Agent and the Knowledge Agent.
 
-> 📸 **Screenshot:** *Agents list with the four agents*
-> `docs/images/07-agents-list.png`
-> <!-- ![Agents list](images/07-agents-list.png) -->
+![CAIPE Agents](images/07-caipe-agents.png)
 
-> 📸 **Screenshot:** *Incident Copilot configuration: tools, approval on `transition_issue`, skill and sub-agents*
-> `docs/images/08-incident-copilot-config.png`
-> <!-- ![Incident Copilot config](images/08-incident-copilot-config.png) -->
+![CAIPE MCP Tools](images/10-caipe-mcp-tools.png)
 
-> 📸 **Screenshot:** *Cluster Agent configuration: read tools, the one write tool and its approval*
-> `docs/images/09-cluster-agent-config.png`
-> <!-- ![Cluster Agent config](images/09-cluster-agent-config.png) -->
+![CAIPE Subagents](images/08-caipe-agent-subagents.png)
 
-> 📸 **Screenshot:** *Support Agent configuration: two Jira tools, product docs and the skill*
-> `docs/images/10-support-agent-config.png`
-> <!-- ![Support Agent config](images/10-support-agent-config.png) -->
+![CAIPE Human Approval](images/09-caipe-human-approval.png)
 
 ---
 
@@ -254,9 +227,7 @@ Seed: [`config/seed/agents.seed.yaml`](../config/seed/agents.seed.yaml)
 
 Then **Admin → Teams → Create Team** for `support`, `oncall` and `owner`, and add each user to their team.
 
-> 📸 **Screenshot:** *Teams list with the three teams and their members*
-> `docs/images/11-teams.png`
-> <!-- ![Teams](images/11-teams.png) -->
+![CAIPE Teams](images/11-caipe-teams.png)
 
 ---
 
@@ -274,19 +245,11 @@ If an agent or tool server is not offered for a team, check the agent's visibili
 
 ✅ **Check:** log in as `joao.silva` in a private window. The agent picker lists **only the Support Agent**.
 
-> 📸 **Screenshot:** *Team details for `support` showing one agent and one knowledge base*
-> `docs/images/12-team-support-access.png`
-> <!-- ![Support access](images/12-team-support-access.png) -->
-
-> 📸 **Screenshot:** *Team details for `oncall` showing three agents and all three knowledge bases*
-> `docs/images/13-team-oncall-access.png`
-> <!-- ![Oncall access](images/13-team-oncall-access.png) -->
-
 ---
 
 ### 3.8 🎫 Demo tickets in Jira
 
-Create **two tickets** in project `AIPLATFORM`, type **Task**, status **To Do**, with the label **`demo-ledgerlite`**. Write them the way a customer would: no internal service names, and fictional customers on a reserved domain such as `example.com`.
+Create a ticket in project `AIPLATFORM`, type **Task**, status **To Do**, with the label **`demo-ledgerlite`**. Write them the way a customer would: no internal service names, and fictional customers on a reserved domain such as `example.com`.
 
 ```text
 Summary:     Customer cannot pay invoice - checkout keeps failing
@@ -303,42 +266,7 @@ Also create **one ticket without the label**, to prove the agents leave it alone
 
 **Make the outage visible:** run `incident-copilot-demo/scripts/reset-fault.sh`, then `incident-copilot-demo/scripts/traffic.sh`.
 
-> 📸 **Screenshot (Jira):** *The `AIPLATFORM` board with the demo tickets in To Do*
-> `docs/images/14-jira-board-before.png`
-> <!-- ![Jira board before](images/14-jira-board-before.png) -->
-
-> 📸 **Screenshot (Jira):** *One demo ticket open: summary, the `Customer:` line, and the `demo-ledgerlite` label*
-> `docs/images/15-jira-ticket-before.png`
-> <!-- ![Jira ticket before](images/15-jira-ticket-before.png) -->
-
----
-
-## 4. 🖼️ What the finished UI looks like
-
-When everything above is done, you should see this. Use this section as a checklist and as the place for your "after" screenshots.
-
-| 👁️ Where | What you should see | |
-| --- | --- | --- |
-| **Agents** | Four agents: 🧭 Incident Copilot, ☸️ Cluster Agent, 📚 Knowledge Agent, 🎧 Support Agent | `07-agents-list.png` |
-| **MCP Servers** | Three servers: `Kubernetes (read-only)`, `Kubernetes (Deployment update)`, `Jira`, all reachable | `02-mcp-servers.png` |
-| **Skills** | One shared skill, `jira-board`, attached to two agents | `05-skill-card.png` |
-| **Knowledge Bases** | Three datasources: 8, 6 and 6 documents | `04-knowledge-bases.png` |
-| **Teams** | `support`, `oncall`, `owner`, each with one member | `11-teams.png` |
-| **As João** | An agent picker with a single entry: Support Agent | `16-picker-support.png` |
-| **As Beatriz** | Incident Copilot, Cluster Agent, Knowledge Agent | `17-picker-oncall.png` |
-| **As Miguel** | All four agents | `18-picker-owner.png` |
-
-> 📸 **Screenshot:** *João's agent picker (one agent)*
-> `docs/images/16-picker-support.png`
-> <!-- ![Support picker](images/16-picker-support.png) -->
-
-> 📸 **Screenshot:** *Beatriz's agent picker (three agents)*
-> `docs/images/17-picker-oncall.png`
-> <!-- ![Oncall picker](images/17-picker-oncall.png) -->
-
-> 📸 **Screenshot:** *Miguel's agent picker (four agents)*
-> `docs/images/18-picker-owner.png`
-> <!-- ![Owner picker](images/18-picker-owner.png) -->
+![JIRA board](images/12-jira-board.png)
 
 ---
 
@@ -380,9 +308,7 @@ sequenceDiagram
 
 *The point:* everything starts from a plain ticket, written by a customer, with no technical detail.
 
-> 📸 **Screenshot (Jira):** *The ticket as the customer filed it*
-> `docs/images/20-act1-ticket.png`
-> <!-- ![Act 1 ticket](images/20-act1-ticket.png) -->
+![JIRA ticket](images/13-jira-ticket.png)
 
 ---
 
@@ -406,17 +332,11 @@ sequenceDiagram
 
 *The point:* same platform, same ticket, but this persona has no cluster, no runbooks and no write tools, and it still gives a useful answer.
 
-> 📸 **Screenshot (CAIPE):** *Support Agent listing the open tickets in a table*
-> `docs/images/21-act2-support-list.png`
-> <!-- ![Support list](images/21-act2-support-list.png) -->
+![CAIPE Support Chat 1](images/14-caipe-support-chat-1.png)
 
-> 📸 **Screenshot (CAIPE):** *Support Agent's draft reply with the `To:` line and the cited documents*
-> `docs/images/22-act2-support-draft.png`
-> <!-- ![Support draft](images/22-act2-support-draft.png) -->
+![CAIPE Support Chat 2](images/15-caipe-support-chat-2.png)
 
-> 📸 **Screenshot (CAIPE):** *Support Agent declining to change the ticket*
-> `docs/images/23-act2-support-refusal.png`
-> <!-- ![Support refusal](images/23-act2-support-refusal.png) -->
+![CAIPE Support Chat 3](images/16-caipe-support-chat-3.png)
 
 ---
 
@@ -442,25 +362,15 @@ sequenceDiagram
 
 *The point:* the agent did the legwork across three specialists and wrote it down, and a person decided whether to move the ticket.
 
-> 📸 **Screenshot (CAIPE):** *The Incident Copilot's tool calls: ticket read, Cluster Agent, Knowledge Agent, comment*
-> `docs/images/24-act3-copilot-calls.png`
-> <!-- ![Copilot calls](images/24-act3-copilot-calls.png) -->
+![CAIPE oncall Chat 1](images/17-caipe-oncall-chat-1.png)
 
-> 📸 **Screenshot (CAIPE):** *The approval card for `transition_issue`*
-> `docs/images/25-act3-approval-card.png`
-> <!-- ![Approval card](images/25-act3-approval-card.png) -->
+![CAIPE oncall Chat 2](images/18-caipe-oncall-chat-2.png)
 
-> 📸 **Screenshot (CAIPE):** *The final answer with the Sources and Ticket lines*
-> `docs/images/26-act3-copilot-answer.png`
-> <!-- ![Copilot answer](images/26-act3-copilot-answer.png) -->
+![CAIPE oncall Chat 3](images/19-caipe-oncall-chat-3.png)
 
-> 📸 **Screenshot (Jira):** *The ticket after approval: In Progress, with the diagnosis comment*
-> `docs/images/27-act3-jira-after.png`
-> <!-- ![Jira after](images/27-act3-jira-after.png) -->
+![CAIPE JIRA In progress](images/22-caipe-jira-in-progress.png)
 
-> 📸 **Screenshot (CAIPE):** *The rejected path: card rejected, ticket still To Do*
-> `docs/images/28-act3-rejected.png`
-> <!-- ![Rejected](images/28-act3-rejected.png) -->
+![CAIPE JIRA ticket comments](images/23-caipe-jira-ticket-comments.png)
 
 ---
 
@@ -478,54 +388,23 @@ sequenceDiagram
 
 *The point:* the agent proposed, a person disposed. The card shows the exact change, not a yes/no button.
 
-> 📸 **Screenshot (CAIPE):** *The Incident Copilot refusing and pointing to the Cluster Agent*
-> `docs/images/29-act4-copilot-refusal.png`
-> <!-- ![Copilot refusal](images/29-act4-copilot-refusal.png) -->
+![CAIPE oncall Chat 4](images/20-caipe-oncall-chat-4.png)
 
-> 📸 **Screenshot (CAIPE):** *The Cluster Agent's approval card showing the full Deployment*
-> `docs/images/30-act4-rollback-card.png`
-> <!-- ![Rollback card](images/30-act4-rollback-card.png) -->
-
-> 📸 **Screenshot (CAIPE):** *After Reject: nothing changed*
-> `docs/images/31-act4-rejected.png`
-> <!-- ![Rollback rejected](images/31-act4-rejected.png) -->
+![CAIPE oncall Chat 5](images/21-caipe-oncall-chat-5.png)
 
 ---
 
-### 🎬 Act 5 · 🎧 João again: the customer hears back
-
-**Who:** `joao.silva`. **Agent:** 🎧 Support Agent.
-
-1. Ask again: **`Draft a reply for AIPLATFORM-n.`**
-2. The ticket is now **In Progress** and has the engineering comment. The draft says **the team is looking into it**, and does **not** repeat the diagnosis, the services or the log lines, because comments starting with `[Incident Copilot]` are internal.
-
-*The point:* the same ticket now carries engineering detail, and support still sends a safe, friendly message.
-
-> 📸 **Screenshot (CAIPE):** *Support Agent's second draft: "we are looking into it", no internal detail*
-> `docs/images/32-act5-support-draft.png`
-> <!-- ![Support second draft](images/32-act5-support-draft.png) -->
-
----
-
-### 🎬 Act 6 · 🔎 Miguel, the owner: seeing the whole picture
+### 🎬 Act 5 · 🔎 Miguel, the owner: seeing the whole picture
 
 **Who:** `miguel.ferreira`.
 
 1. **Open the agent picker.** All four agents.
 2. Open the **Knowledge Agent** and ask: **`Should I restart the checkout pod?`**
-   It cites `PM-03` and `RB-06`, says **"These sources disagree."**, lays out both positions and recommends PM-03 because it is newer. This is the moment where citations let a person see the disagreement instead of a confident wrong answer.
-3. Open the **teams page** and show who can reach what.
-4. Open the **Jira ticket** one last time: the comment, the status change, and the link.
+   It cites `RB-06` This is the moment where citations let a person see the disagreement instead of a confident wrong answer.
 
 *The point:* the owner can read the agents, the access and the result.
 
-> 📸 **Screenshot (CAIPE):** *Knowledge Agent: "These sources disagree", with both positions and the sources*
-> `docs/images/33-act6-knowledge-disagree.png`
-> <!-- ![Knowledge disagree](images/33-act6-knowledge-disagree.png) -->
-
-> 📸 **Screenshot (Jira):** *The final ticket: In Progress, the diagnosis comment, the label*
-> `docs/images/34-act6-jira-final.png`
-> <!-- ![Jira final](images/34-act6-jira-final.png) -->
+![CAIPE Knowledge Base](images/24-caipe-knowledge-base.png)
 
 ---
 
@@ -539,16 +418,3 @@ sequenceDiagram
 | 4 | 🧑‍🔧 Beatriz | Incident Copilot, then Cluster Agent | `Just roll back the deploy.` | A refusal, then **an approval card you reject** |
 | 5 | 🎧 João | Support Agent | `Draft a reply for AIPLATFORM-n.` | "The team is looking into it", no internal detail |
 | 6 | 🔎 Miguel | Knowledge Agent | `Should I restart the checkout pod?` | "These sources disagree", citing PM-03 over RB-06 |
-
----
-
-## 6. ⚠️ Good to know
-
-| | Note |
-| --- | --- |
-| 🏷️ | **The ticket label filter is a convention, not a lock.** The agents are told to use only tickets labelled `demo-ledgerlite`, but Jira itself does not block the others. |
-| 🤝 | **The Incident Copilot is read-only by instruction and approval**, not by construction: it cannot write to the cluster, but its sub-agent can, after a person approves. |
-| 🔌 | **The Jira server's comments are plain text.** The bundled Jira server in this CAIPE version cannot render bold or tables, so the diagnosis uses emojis and a fixed layout. |
-| 🧪 | **Still to confirm in your setup:** that an approval card appears when a sub-agent proposes a write, and how long the Deployment card looks on screen. |
-
-> Everything in this demo is synthetic: fictional customers, fictional payments, a made-up app. 🧪
