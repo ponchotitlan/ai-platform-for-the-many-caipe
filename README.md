@@ -43,35 +43,6 @@ for the talk *Democratising AI Platform Engineering with Open Source: Own It, Ru
 
 Think of it as the **workshop**, not the product: you bring the problem, the documents and the rules, and CAIPE gives you the parts to assemble a team of agents.
 
-### ⚡ Capabilities in a nutshell
-
-```mermaid
-mindmap
-  root((🧠 CAIPE))
-    🤖 Agents
-      Created from the web UI
-      Any supported LLM
-      Sub-agents that delegate
-    🔧 Tools through MCP
-      Kubernetes, Jira, GitHub and more
-      One server per system
-      Each agent gets only the tools you list
-    📚 Knowledge
-      Upload or connect documents
-      Cited answers
-      One datasource per owner
-    🧩 Skills
-      Reusable instructions
-      Shared between agents
-      Teach a procedure, grant no tools
-    🔐 People and permissions
-      Single sign-on
-      Teams
-      Who can use which agent or knowledge base
-    🙋 Human in the loop
-      Approval before a risky tool call
-      Approve, edit or reject
-```
 
 | | Capability | What it means for you |
 | --- | --- | --- |
@@ -98,15 +69,6 @@ flowchart LR
     E -- "✅ yes" --> F["🚀 Ticket moves on"]
     E -- "❌ no" --> G["🛑 Nothing changes"]
 ```
-
-### 🪤 What is planted for you to find
-
-| 🎯 The trap | What it tests |
-| --- | --- |
-| **A bad rollout** `checkout-api` v1.4.0 changed a timeout from 5000 ms to 500 ms. The mock payment gateway answers in 2 to 5 seconds, so most payments fail. | Can the agents find the *real* cause? |
-| **Two red herrings** The runbooks about *database connections* and *payment provider outages* look relevant, but the checks come back normal. | Do the agents stay calm and rule things out? |
-| **Contradicting documents** An old runbook says "restart the pod first". A newer postmortem says restarting made it worse. | Does the agent show both and say which it prefers? |
-| **A shared Jira project** Other people's tickets live next to the demo ones. | Do the agents stay in their lane? |
 
 ---
 
@@ -268,7 +230,8 @@ The agents never close tickets. *Done* belongs to humans.
 
 | | Guide | What you get |
 | --- | --- | --- |
-| 🛠️ | [**Setup and running guide**](docs/README.md) | How to set up each component on a running CAIPE, what the finished UI looks like, and a step-by-step walkthrough of each persona, with room for your screenshots. |
+| 🎟️ | [**A Day in the Life**](docs/walkthrough/README.md) | See the story of a JIRA ticket through each agent, persona, permission and change. From start to finish. |
+| 🛠️ | [**Setup and running guide**](docs/README.md) | How to set up each component on a running CAIPE, what the finished UI looks like. |
 | 💬 | [**Slack integration guide**](slack/README.md) | How to talk to the agents from a Slack channel instead of the web UI: the Slack app, the bot, identity and channel routes. |
 | 🔭 | [**Observability guide**](observability/README.md) | Where CAIPE's telemetry comes from, and how it is collected and shown in Splunk. |
 | 🌐 | [**CAIPE website**](https://caipe.io/) | The CAIPE project itself: documentation, community and getting started. |
