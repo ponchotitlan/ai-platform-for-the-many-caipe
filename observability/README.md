@@ -10,7 +10,21 @@ No CAIPE code was changed to get here. CAIPE already leaves a trail of telemetry
 
 ---
 
-## 1. The whole thing on one page
+## Files
+
+| File | Job |
+|---|---|
+| `docker-compose.yaml` | The sidecars: collector, poller, optional mock HEC |
+| `otel-collector.yaml` | Scrape, filter, ship metrics |
+| `poller.py`, `Dockerfile.poller` | Langfuse + MongoDB to events |
+| `mock_hec.py` | Fake Splunk for local testing |
+| `caipe_dashboard.json` | The dashboard (generated) |
+| `build_dashboard.py` | Generator for the JSON. Edit this, then `python3 build_dashboard.py` |
+| `.env.example` | Settings template |
+
+---
+
+## 1. The observability lifecycle
 
 ```mermaid
 flowchart LR
@@ -227,6 +241,14 @@ index=caipe_events | stats count BY sourcetype
 
 ## 7. What the dashboard shows
 
+![Splunk 1](images/1-splunk.png)
+
+![Splunk 2](images/2-splunk.png)
+
+![Splunk 3](images/3-splunk.png)
+
+![Splunk 4](images/4-splunk.png)
+
 Two filters at the top: **time range** and **team**.
 
 ### The six tiles
@@ -258,31 +280,5 @@ Two filters at the top: **time range** and **team**.
 | **Tools and MCP** | Tool calls by tool | Which tools the agents lean on |
 | | Tool health | Calls, error % and average latency per tool |
 
-Leave a spot for screenshots here once you have them.
-
 ---
 
-## 8. Gotchas we hit (so you don't have to)
-
-Each one cost real time and is a nice dinner story.
-
-1. **The token counters are empty.** CAIPE defines `da_llm_input_tokens_total` and `..._output_...`, but only increments them when the LLM reply carries usage metadata. In this deployment it doesn't, so they never get a sample. Langfuse does record tokens and cost, hence the events pipe.
-2. **Langfuse returns HTTP 500 for "since 1970".** Its ClickHouse query dislikes epoch zero. The first poll backfills 30 days instead.
-3. **`teams` is really `teams{}`.** Splunk extracts JSON arrays with braces in the field name. Searches use `teams{}`. Also, users with no team get `["none"]` so the team filter doesn't quietly drop them.
-4. **Some panels sleep until someone uses CAIPE.** Turns by outcome, tool calls, tool health, time to first response and LLM latency are computed from **counter increases** (`rate_sum`). Counters are running totals, so a quiet system has a rate of exactly zero. These panels also only know about activity **after** the collector started. The Langfuse panels have full history. A flat panel usually means a quiet system, not a broken pipeline.
-5. **Metrics index type matters** (step 1 above). A silent failure with a smiling "Success".
-6. **Hostnames differ by stack type** (step 3). Don't guess; resolve.
-
----
-
-## 9. Files
-
-| File | Job |
-|---|---|
-| `docker-compose.yaml` | The sidecars: collector, poller, optional mock HEC |
-| `otel-collector.yaml` | Scrape, filter, ship metrics |
-| `poller.py`, `Dockerfile.poller` | Langfuse + MongoDB to events |
-| `mock_hec.py` | Fake Splunk for local testing |
-| `caipe_dashboard.json` | The dashboard (generated) |
-| `build_dashboard.py` | Generator for the JSON. Edit this, then `python3 build_dashboard.py` |
-| `.env.example` | Settings template |

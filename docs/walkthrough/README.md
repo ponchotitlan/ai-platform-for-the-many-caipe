@@ -118,7 +118,7 @@ The agent proposes, the person decides, and the card shows exactly what would ch
 
 Miguel owns the platform. His picker shows **all four agents**.
 
-He asks the **Knowledge Agent** **`Should I restart the checkout pod?`** Instead of a confident wrong answer, it cites `RB-06` and says the sources disagree, because PM-03 says restarting made it worse.
+He asks the **Knowledge Agent** **`Should I restart the checkout pod?`**, which then cites `RB-06`.
 
 ![CAIPE Knowledge Base](../images/24-caipe-knowledge-base.png)
 
@@ -132,4 +132,4 @@ He asks the **Knowledge Agent** **`Should I restart the checkout pod?`** Instead
 | 2 | 🎧 João | Support Agent | `List the open tickets.` · `Draft a reply for AIPLATFORM-n.` | A table, then a safe draft with sources |
 | 3 | 🧑‍🔧 Beatriz | Incident Copilot | `Work on AIPLATFORM-n.` | Sub-agent calls, a Jira comment, **an approval card**, *In Progress* |
 | 4 | 🧑‍🔧 Beatriz | Incident Copilot, then Cluster Agent | `Just roll back the deploy.` | A refusal, then **an approval card you reject** |
-| 5 | 🔎 Miguel | Knowledge Agent | `Should I restart the checkout pod?` | "These sources disagree", PM-03 over RB-06 |
+| 5 | 🔎 Miguel | Knowledge Agent | `Should I restart the checkout pod?` | RB-06 being quoted by the Knowledge Sources |
