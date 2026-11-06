@@ -1,6 +1,6 @@
 # LedgerLite (sample app)
 
-Fictional invoicing and card-payments product on a local kind cluster. It exists to fail in one repeatable way. See `docs/SPEC.md` section 3.
+Fictional invoicing and card-payments product on a local kind cluster. It exists to fail in one repeatable way.
 
 | Service | Image | Notes |
 | --- | --- | --- |

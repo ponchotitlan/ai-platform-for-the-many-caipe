@@ -7,9 +7,7 @@ Then a step-by-step tour of what each person does with it.
 1. [What you need first](#1--what-you-need-first)
 2. [Build order](#2--build-order)
 3. [Setup, component by component](#3--setup-component-by-component)
-4. [What the finished UI looks like](#4--what-the-finished-ui-looks-like)
-5. [The walkthrough: who does what, in order](#5--the-walkthrough-who-does-what-in-order)
-6. [Good to know](#6--good-to-know)
+4. [The walkthrough: who does what, in order](#4--the-walkthrough-who-does-what-in-order)
 
 ---
 
@@ -19,11 +17,11 @@ The following are the files and folders from this repository that we will work w
 
 | 📁 Folder | What is inside |
 | --- | --- |
-| [`config/seed/`](config/seed/) | The agents and tool servers, written out as readable YAML (reference copies, created by hand in the UI). |
-| [`skills/`](skills/) | The shared `jira-board` skill. |
-| [`kb/`](kb/) | The 20 knowledge documents: runbooks, past incidents, product docs. |
-| [`incident-copilot-demo/`](incident-copilot-demo/) | LedgerLite: the app, its Kubernetes manifests, and the helper scripts. |
-| [`docs/`](docs/) | The full spec, every decision and trade-off, and the step-by-step guides. |
+| [`config/seed/`](../config/seed/) | The agents and tool servers, written out as readable YAML (reference copies, created by hand in the UI). |
+| [`skills/`](../skills/) | The shared `jira-board` skill. |
+| [`kb/`](../kb/) | The 20 knowledge documents: runbooks, past incidents, product docs. |
+| [`incident-copilot-demo/`](../incident-copilot-demo/) | LedgerLite: the app, its Kubernetes manifests, and the helper scripts. |
+| [`docs/`](./) | The full spec, every decision and trade-off, and the step-by-step guides. |
 
 ---
 
@@ -270,7 +268,7 @@ Also create **one ticket without the label**, to prove the agents leave it alone
 
 ---
 
-## 5. 🎭 The walkthrough: who does what, in order
+## 4. 🎭 The walkthrough: who does what, in order
 
 The demo, told as a story: a customer cannot pay, support answers safely, the on-call engineer diagnoses and a person approves every change, and the owner sees the whole picture.
 
