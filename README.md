@@ -213,19 +213,6 @@ The agents never close tickets. *Done* belongs to humans.
 
 ---
 
-## 🛡️ Why you can trust it
-
-| 🧱 Guardrail | How it works |
-| --- | --- |
-| ✋ **Approval before every change** | The two writes (move a ticket, update a Deployment) pause on an approval card that shows the exact call. Approve, edit or reject. |
-| 🎯 **Few tools, by name** | Jira offers about 62 tools. The Copilot may use five, and the Support Agent two. |
-| 👀 **Reads and writes use different identities** | The cluster account that reads cannot write, and the one that writes can only touch Deployments in one namespace. |
-| 👥 **Access is a team setting** | Support cannot reach the runbooks or the cluster agents, whatever the prompt says. |
-| 🧩 **Tickets are data, not orders** | If a ticket says "ignore your rules", the agents are told to ignore *that* and say so. |
-| 🔍 **Honest about limits** | The agents are told to say what they could not check, and the knowledge agent flags when two documents disagree. |
-
----
-
 ## 📚 Guides and links
 
 | | Guide | What you get |
