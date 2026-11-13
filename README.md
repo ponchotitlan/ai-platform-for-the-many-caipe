@@ -10,30 +10,36 @@ for the talk *Democratising AI Platform Engineering with Open Source: Own It, Ru
 <div align="center">
 
 <p>
-  <img src="https://img.shields.io/badge/CAIPE-0.5.66-6F42C1?style=flat&labelColor=555555&logoColor=white" alt="CAIPE 0.5.66"/>
-  <img src="https://img.shields.io/badge/MCP-tool%20servers-1F1F1F?style=flat&logo=modelcontextprotocol&labelColor=555555&logoColor=white" alt="MCP tool servers"/>
+  <img src="https://img.shields.io/badge/CAIPE-1.3.6-6F42C1?style=flat&labelColor=555555&logoColor=white" alt="CAIPE 1.3.6"/>
+  <img src="https://img.shields.io/badge/Jira%20MCP%20server-0.5.66-0052CC?style=flat&logo=jira&labelColor=555555&logoColor=white" alt="Jira MCP server 0.5.66"/>
   <img src="https://img.shields.io/badge/AgentGateway-v1.1.0-E5532D?style=flat&labelColor=555555&logoColor=white" alt="AgentGateway v1.1.0"/>
   <img src="https://img.shields.io/badge/Keycloak-26.3-4D4D4D?style=flat&logo=keycloak&labelColor=555555&logoColor=white" alt="Keycloak 26.3"/>
-  <img src="https://img.shields.io/badge/OpenFGA-latest-1F6FEB?style=flat&labelColor=555555&logoColor=white" alt="OpenFGA latest"/>
-  <img src="https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=flat&logo=openai&labelColor=555555&logoColor=white" alt="OpenAI GPT-4o"/>
-  <img src="https://img.shields.io/badge/OpenAI-GPT--4o%20mini-412991?style=flat&logo=openai&labelColor=555555&logoColor=white" alt="OpenAI GPT-4o mini"/><br/>
+  <img src="https://img.shields.io/badge/OpenFGA-latest-1F6FEB?style=flat&labelColor=555555&logoColor=white" alt="OpenFGA latest"/><br/>
   <img src="https://img.shields.io/badge/Milvus-v2.5.14-00A1EA?style=flat&logo=milvus&labelColor=555555&logoColor=white" alt="Milvus v2.5.14"/>
   <img src="https://img.shields.io/badge/MongoDB-7.0-47A248?style=flat&logo=mongodb&labelColor=555555&logoColor=white" alt="MongoDB 7.0"/>
   <img src="https://img.shields.io/badge/Redis-7-DC382D?style=flat&logo=redis&labelColor=555555&logoColor=white" alt="Redis 7"/>
-  <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&labelColor=555555&logoColor=white" alt="PostgreSQL 16"/><br/>
-  <img src="https://img.shields.io/badge/Docker-29.9.2-2496ED?style=flat&logo=docker&labelColor=555555&logoColor=white" alt="Docker 29.9.2"/>
-  <img src="https://img.shields.io/badge/kind-v0.33.0-326CE5?style=flat&logo=kubernetes&labelColor=555555&logoColor=white" alt="kind v0.33.0"/>
-  <img src="https://img.shields.io/badge/Kubernetes-v1.37-326CE5?style=flat&logo=kubernetes&labelColor=555555&logoColor=white" alt="Kubernetes v1.37"/>
-  <img src="https://img.shields.io/badge/kubectl-v1.37.1-326CE5?style=flat&logo=kubernetes&labelColor=555555&logoColor=white" alt="kubectl v1.37.1"/>
-  <img src="https://img.shields.io/badge/Kubernetes%20MCP%20server-v0.0.67-326CE5?style=flat&logo=kubernetes&labelColor=555555&logoColor=white" alt="Kubernetes MCP server v0.0.67"/>
-  <img src="https://img.shields.io/badge/Jira%20MCP%20server-0.5.66-0052CC?style=flat&logo=jira&labelColor=555555&logoColor=white" alt="Jira MCP server 0.5.66"/>
-  <img src="https://img.shields.io/badge/Jira-Cloud-0052CC?style=flat&logo=jira&labelColor=555555&logoColor=white" alt="Jira Cloud"/><br/>
+  <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&labelColor=555555&logoColor=white" alt="PostgreSQL 16"/>
   <img src="https://img.shields.io/badge/Python-3.13%20agents-3776AB?style=flat&logo=python&labelColor=555555&logoColor=white" alt="Python 3.13 agents"/>
-  <img src="https://img.shields.io/badge/Python-3.12%20LedgerLite-3776AB?style=flat&logo=python&labelColor=555555&logoColor=white" alt="Python 3.12 LedgerLite"/>
   <img src="https://img.shields.io/badge/Node.js-24%20UI-5FA04E?style=flat&logo=nodedotjs&labelColor=555555&logoColor=white" alt="Node.js 24 UI"/>
 </p>
 
+<a href="https://www.youtube.com/watch?v=J9VWVIiNH90" title="Watch the video on YouTube">
+  <img src="https://img.youtube.com/vi/J9VWVIiNH90/hqdefault.jpg" alt="Watch the video on YouTube" width="420"/>
+</a>
+<br/>
+<sub>▶️ Click to watch on YouTube</sub>
+
 </div>
+
+---
+
+## 🏗️ What is AI platform engineering?
+
+**Platform engineering** builds the shared, self-service foundation that development teams build on: paved roads, golden paths and guardrails, so each team doesn't have to rebuild the same plumbing.
+
+**AI platform engineering** does the same for AI agents. One platform gives every team the same building blocks: access to models, connections to tools and data, knowledge retrieval, identity and permissions, human approvals and observability. Teams then spend their time on the problem they're solving, while the platform makes sure every agent stays **secure, governed and auditable**.
+
+The aim is to make agents something **many** people can build and run safely, not just a few AI specialists.
 
 ---
 
